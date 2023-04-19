@@ -13,10 +13,9 @@ app.use(
     secure: false,
     httpOnly: true,
     secret: "as98d7asyudbahs8d97a6digas78d866u",
-    maxAge: 1000 * 20,
+    maxAge: 1000 * 3600,
   })
 );
-// TODO: Insert cookie-stuff
 
 const uri =
   "mongodb+srv://superuser:DiiWV2H7irGTztEK@clusterfudge.wfhk6bq.mongodb.net/thefriendzone?retryWrites=true&w=majority";

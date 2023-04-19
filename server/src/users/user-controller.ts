@@ -54,3 +54,27 @@ export async function getAllUsers(req: Request, res: Response) {
     });
   }
 }
+
+export async function loginUser(req: Request, res: Response) {
+  const { email, password } = req.body;
+  const userCollection = db.collection("users");
+  const users = await userCollection.find().toArray();
+
+  // Check user
+  const user = users.find((u) => u.email === email);
+  if (!user) {
+    return res.status(400).json("No user with that email registered");
+  }
+
+  // Check password
+  const isAuth = await argon2.verify(user.password, password);
+  if (!isAuth) {
+    return res.status(400).json("Incorrect password");
+  }
+
+  // Create session/cookie
+  req.session!.email = user.email;
+
+  // Send response
+  res.status(200).json("Login sucessful!");
+}
