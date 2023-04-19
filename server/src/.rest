@@ -4,5 +4,8 @@ Content-Type: application/json
 
 {
   "username": "Carlito",
-  "password": 123456
+  "password": "123456"
 }
+
+### Get all users
+GET http://localhost:3000/users

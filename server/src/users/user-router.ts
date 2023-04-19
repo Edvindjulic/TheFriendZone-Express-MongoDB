@@ -1,20 +1,36 @@
+import argon2 from "argon2";
 import express from "express";
 import { db } from "../app";
 
 const userRouter = express
   .Router()
-  .get("/users", async (req, res) => {})
+  // Admin priveleges?! :O
+  .get("/users", async (req, res) => {
+    try {
+      const userCollection = db.collection("users");
+
+      const users = await userCollection.find().toArray();
+
+      res.status(200).json({ message: "All users", data: users });
+    } catch (error) {
+      console.error("Error finding users:", error);
+      res.status(500).json({
+        message: "Error finding users",
+        error: (error as any).message,
+      });
+    }
+  })
   .post("/users", async (req, res) => {
     try {
       const { username, password } = req.body;
+      const hashedPassword = await argon2.hash(password);
+
       const userCollection = db.collection("users");
 
-      const result = await userCollection.insertOne({ username, password });
-      const insertedDocument = { _id: result.insertedId, username, password }; // Create the inserted document object
+      const user = { username, password: hashedPassword };
+      const result = await userCollection.insertOne(user);
 
-      res
-        .status(201)
-        .json({ message: "user inserted", data: insertedDocument });
+      res.status(201).json({ message: "User inserted", data: user });
     } catch (error) {
       console.error("Error inserting user:", error);
       res.status(500).json({
