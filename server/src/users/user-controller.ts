@@ -60,19 +60,16 @@ export async function loginUser(req: Request, res: Response) {
   const userCollection = db.collection("users");
   const users = await userCollection.find().toArray();
 
-  // Check user
   const user = users.find((u) => u.email === email);
   if (!user) {
     return res.status(400).json("No user with that email registered");
   }
 
-  // Check password
   const isAuth = await argon2.verify(user.password, password);
   if (!isAuth) {
     return res.status(400).json("Incorrect password");
   }
 
-  // Create session/cookie
   req.session!.email = user.email;
   if (user.admin === true) {
     req.session!.admin = true;
@@ -80,6 +77,10 @@ export async function loginUser(req: Request, res: Response) {
     req.session!.admin = false;
   }
 
-  // Send response
   res.status(200).json("Login sucessful!");
+}
+
+export function logoutUser(req: Request, res: Response) {
+  req.session = null;
+  res.status(200).json({ message: "Logged out successfully" });
 }
