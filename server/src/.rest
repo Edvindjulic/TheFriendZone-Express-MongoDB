@@ -1,8 +1,8 @@
-### Insert a horse
-POST http://localhost:3000/horses
+### Register a user
+POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "name": "Hello3",
-  "complexity": 1337
+  "username": "Carlito",
+  "password": 123456
 }
