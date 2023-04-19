@@ -4,10 +4,10 @@ import { db } from "../app";
 
 export async function registerUser(req: Request, res: Response) {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, admin } = req.body;
     const hashedPassword = await argon2.hash(password);
     const userCollection = db.collection("users");
-    const user = { username, email, password: hashedPassword };
+    const user = { username, email, password: hashedPassword, admin };
 
     const allUsers = await userCollection.find().toArray();
 
@@ -74,6 +74,11 @@ export async function loginUser(req: Request, res: Response) {
 
   // Create session/cookie
   req.session!.email = user.email;
+  if (user.admin === true) {
+    req.session!.admin = true;
+  } else {
+    req.session!.admin = false;
+  }
 
   // Send response
   res.status(200).json("Login sucessful!");

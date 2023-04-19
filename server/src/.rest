@@ -3,9 +3,10 @@ POST http://localhost:3000/users/register
 Content-Type: application/json
 
 {
-  "username": "Controller",
-  "email": "hej@test.com",
-  "password": "21233"
+  "username": "admin",
+  "email": "admin@admin.se",
+  "password": "1337admin",
+  "admin": true
 }
 
 ### Get all users
@@ -17,6 +18,6 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-  "email": "hej@test.com",
-    "password": "21233"
+  "email": "admin@admin.se",
+    "password": "1337admin"
 }
