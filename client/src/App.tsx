@@ -3,7 +3,7 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { Outlet } from "react-router-dom";
-/* import Footer from "./components/Footer"; */
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { theme } from "./components/theme";
 
@@ -18,7 +18,7 @@ function App() {
           <Outlet />
         </main>
         <footer>
-          {/* <Footer /> */}
+          <Footer />
         </footer>
       </Box>
     </ThemeProvider>
