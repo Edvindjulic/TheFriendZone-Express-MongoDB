@@ -9,10 +9,17 @@ Content-Type: application/json
   "admin": true
 }
 
+### Login
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "email": "admin@admin.se",
+    "password": "1337admin"
+}
+
 ### Get all users
 GET http://localhost:3000/users
-
-
 
 
 ### Get Posts

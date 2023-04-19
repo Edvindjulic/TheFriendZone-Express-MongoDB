@@ -8,7 +8,8 @@ const userRouter = express
   .get("/users", adminAuth, getAllUsers)
   .post("/users/register", registerUser)
   .post("/login", loginUser);
-//   .put("/users", async (req, res) => {})
-//   .delete("/users", async (req, res) => {});
+// Delete user
+// Update user
+// Get a specific user
 
 export default userRouter;
