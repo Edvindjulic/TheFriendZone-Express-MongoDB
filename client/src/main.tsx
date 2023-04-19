@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@emotion/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {
@@ -8,6 +9,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import App from "./App";
+import { theme } from "./components/theme";
 import "./index.css";
 import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
@@ -34,6 +36,8 @@ ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 ).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );
