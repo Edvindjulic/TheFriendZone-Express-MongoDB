@@ -1,10 +1,8 @@
+### Insert a horse
+POST http://localhost:3000/horses
+Content-Type: application/json
 
-
-
-### GET 
-
-GET http://mongodb+srv://superuser:DiiWV2H7irGTztEK@clusterfudge.wfhk6bq.mongodb.net/thefriendzone?retryWrites=true&w=majority
-
-### Post
-
-POST http://mongodb+srv://superuser:DiiWV2H7irGTztEK@clusterfudge.wfhk6bq.mongodb.net/thefriendzone?retryWrites=true&w=majority
+{
+  "name": "Royal",
+  "complexity": 1337
+}
