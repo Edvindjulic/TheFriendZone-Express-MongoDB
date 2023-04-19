@@ -1,9 +1,10 @@
 ### Register a user
-POST http://localhost:3000/users
+POST http://localhost:3000/users/register
 Content-Type: application/json
 
 {
-  "username": "Carlito",
+  "username": "Cas",
+  "email": "calle@lysmasks.se",
   "password": "123456"
 }
 
