@@ -13,11 +13,20 @@ Content-Type: application/json
 GET http://localhost:3000/users
 
 
-### Login 
-POST http://localhost:3000/login
+
+
+### Get Posts
+GET http://localhost:3000/posts
+
+
+### Get Specific Post
+GET http://localhost:3000/posts/643fe89a77695257992378ce
+
+### Post a post(postception)
+POST http://localhost:3000/posts
 Content-Type: application/json
 
 {
-  "email": "admin@admin.se",
-    "password": "1337admin"
+  "content": "this is a post!"
 }
+

@@ -1,6 +1,7 @@
 import cookieSession from "cookie-session";
 import express from "express";
 import { MongoClient } from "mongodb";
+import postRouter from "./posts/post-router";
 import userRouter from "./users/user-router";
 
 export const app = express();
@@ -23,7 +24,7 @@ export const client = new MongoClient(uri);
 const dbName = "coolmegadatabase";
 export const db = client.db(dbName);
 
-// app.use(postRouter);
+app.use(postRouter);
 app.use(userRouter);
 
 // const postRouter

@@ -22,11 +22,12 @@ export const theme = createTheme({
       "Libre Franklin",
     ].join(","),
     h5: {
-      fontWeight: 300,
-      fontFamily: "Source Sans Pro",
+      fontWeight: 600,
+      fontFamily: "Libre Franklin",
     },
     h4: {
       fontFamily: "Libre Franklin",
+      fontWeight: 600,
     },
     body1: {
       fontSize: "1rem",
