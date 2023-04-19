@@ -3,9 +3,9 @@ POST http://localhost:3000/users/register
 Content-Type: application/json
 
 {
-  "username": "Cas",
-  "email": "calle@lysmasks.se",
-  "password": "123456"
+  "username": "Controller",
+  "email": "hej@test.com",
+  "password": "21233"
 }
 
 ### Get all users
