@@ -4,7 +4,7 @@ import { db } from "../app";
 
 const userRouter = express
   .Router()
-  // Admin priveleges?! :O
+  // Get all users (admin)
   .get("/users", async (req, res) => {
     try {
       const userCollection = db.collection("users");
@@ -20,17 +20,36 @@ const userRouter = express
       });
     }
   })
-  .post("/users", async (req, res) => {
+  // Register a new user
+  .post("/users/register", async (req, res) => {
     try {
-      const { username, password } = req.body;
+      const { username, email, password } = req.body;
       const hashedPassword = await argon2.hash(password);
-
       const userCollection = db.collection("users");
+      const user = { username, email, password: hashedPassword };
 
-      const user = { username, password: hashedPassword };
+      const allUsers = await userCollection.find().toArray();
+
+      const mailCheck = allUsers.find((user) => user.email === email);
+      const usernameCheck = allUsers.find((user) => user.username === username);
+      if (mailCheck) {
+        return res.status(400).json({
+          message: "Email already in use",
+          error: "Email already in use",
+        });
+      }
+      if (usernameCheck) {
+        return res.status(400).json({
+          message: "Username already in use",
+          error: "Username already in use",
+        });
+      }
+
       const result = await userCollection.insertOne(user);
-
-      res.status(201).json({ message: "User inserted", data: user });
+      res.status(201).json({
+        message: "User inserted",
+        data: { ...user, _id: result.insertedId },
+      });
     } catch (error) {
       console.error("Error inserting user:", error);
       res.status(500).json({
