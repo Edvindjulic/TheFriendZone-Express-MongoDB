@@ -3,6 +3,6 @@ POST http://localhost:3000/horses
 Content-Type: application/json
 
 {
-  "name": "Royal",
+  "name": "Hello3",
   "complexity": 1337
 }

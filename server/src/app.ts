@@ -25,12 +25,15 @@ app.post("/horses", async (req, res) => {
     const userCollection = db.collection("horses");
 
     const result = await userCollection.insertOne({ name, complexity });
-    res.status(201).json({ message: "Horse inserted", data: result.ops[0] });
+    const insertedDocument = { _id: result.insertedId, name, complexity }; // Create the inserted document object
+
+    res.status(201).json({ message: "Horse inserted", data: insertedDocument });
   } catch (error) {
-    console.error("Error inserting horse:", error); // Log the error to the console
-    res
-      .status(500)
-      .json({ message: "Error inserting horse", error: error.message });
+    console.error("Error inserting horse:", error);
+    res.status(500).json({
+      message: "Error inserting horse",
+      error: (error as any).message,
+    });
   }
 });
 
