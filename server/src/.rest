@@ -10,3 +10,13 @@ Content-Type: application/json
 
 ### Get all users
 GET http://localhost:3000/users
+
+
+### Login 
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "email": "hej@test.com",
+    "password": "21233"
+}
