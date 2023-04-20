@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ### Login
-POST http://localhost:3000/login
+POST http://localhost:3000/api/login
 Content-Type: application/json
 
 {
@@ -19,14 +19,14 @@ Content-Type: application/json
 }
 
 ### Logout
-POST http://localhost:3000/logout
+POST http://localhost:3000/api/logout
 
 ### Get all users
-GET http://localhost:3000/users
+GET http://localhost:3000/api/users
 
 
 ### Get all posts
-GET http://localhost:3000/posts
+GET http://localhost:3000/api/posts
 
 
 ### Get Specific Post

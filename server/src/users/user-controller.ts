@@ -4,6 +4,23 @@ import { UserModel } from "./user-model";
 export async function registerUser(req: Request, res: Response) {
   try {
     const { username, password, isAdmin = false } = req.body;
+    const user = new UserModel({ username, password, isAdmin });
+
+    // Check for missing or incorrect values
+    if (!username || typeof username !== "string") {
+      const message =
+        "Invalid request: Username is missing or has an incorrect format";
+      res.set("content-type", "application/json");
+      return res.status(400).send(JSON.stringify({ message }));
+    }
+
+    if (!password || typeof password !== "string") {
+      const message =
+        "Invalid request: Password is missing or has an incorrect format";
+      res.set("content-type", "application/json");
+
+      return res.status(400).send(JSON.stringify({ message }));
+    }
 
     const users = await UserModel.find({ username: username });
     if (users.length > 0) {
@@ -12,15 +29,14 @@ export async function registerUser(req: Request, res: Response) {
     }
 
     const hashedPassword = await argon2.hash(password);
-    const user = { username, password: hashedPassword, isAdmin };
+    user.password = hashedPassword;
 
-    const result = await UserModel.create(user);
+    const result = await user.save();
 
     const responseObj = {
       message: "User inserted",
-      ...user,
+      ...result.toJSON(),
       password: undefined,
-      _id: result._id,
     };
 
     res.set("content-type", "application/json");
@@ -39,8 +55,7 @@ export async function registerUser(req: Request, res: Response) {
 
 export async function getAllUsers(req: Request, res: Response) {
   try {
-    const userCollection = db.collection("users");
-    const users = await userCollection.find().toArray();
+    const users = await UserModel.find(); // retrieve all users from the database
 
     res.status(200).json({ message: "All users", data: users });
   } catch (error) {
@@ -53,28 +68,30 @@ export async function getAllUsers(req: Request, res: Response) {
 }
 
 export async function loginUser(req: Request, res: Response) {
-  const { email, password } = req.body;
-  const userCollection = db.collection("users");
-  const users = await userCollection.find().toArray();
+  const { username, password } = req.body;
 
-  const user = users.find((u) => u.email === email);
-  if (!user) {
-    return res.status(400).json("No user with that email registered");
+  try {
+    const user = await UserModel.findOne({ username: username });
+    if (!user) {
+      return res.status(400).json("No user with that username registered");
+    }
+
+    const isAuth = await argon2.verify(user.password, password);
+    if (!isAuth) {
+      return res.status(400).json("Incorrect password");
+    }
+
+    req.session!.username = user.username;
+    req.session!.isAdmin = user.isAdmin === true;
+
+    res.status(200).json("Login successful!");
+  } catch (error) {
+    console.error("Error finding user:", error);
+    res.status(500).json({
+      message: "Error finding user",
+      error: (error as any).message,
+    });
   }
-
-  const isAuth = await argon2.verify(user.password, password);
-  if (!isAuth) {
-    return res.status(400).json("Incorrect password");
-  }
-
-  req.session!.email = user.email;
-  if (user.admin === true) {
-    req.session!.admin = true;
-  } else {
-    req.session!.admin = false;
-  }
-
-  res.status(200).json("Login sucessful!");
 }
 
 export function logoutUser(req: Request, res: Response) {
