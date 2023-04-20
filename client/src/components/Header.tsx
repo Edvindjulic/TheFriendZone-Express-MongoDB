@@ -5,6 +5,7 @@ export default function Header() {
     <Box
       sx={{
         height: "auto",
+        textAlign: "center",
       }}
     >
       <Typography
@@ -12,6 +13,7 @@ export default function Header() {
         sx={{
           padding: "0.5rem",
           color: "primary.main",
+          mb: "3rem",
         }}
       >
         The Friend Zone
