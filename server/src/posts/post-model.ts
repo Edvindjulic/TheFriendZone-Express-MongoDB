@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import User from "./users/user-model";
 
 const postSchema = new mongoose.Schema({
   title: {
@@ -10,7 +11,7 @@ const postSchema = new mongoose.Schema({
     required: true,
   },
   author: {
-    type: String,
+    type: User,
   },
 });
 
