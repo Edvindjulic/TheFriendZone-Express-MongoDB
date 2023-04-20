@@ -73,12 +73,12 @@ export async function loginUser(req: Request, res: Response) {
   try {
     const user = await UserModel.findOne({ username: username });
     if (!user) {
-      return res.status(400).json("No user with that username registered");
+      return res.status(401).json("No user with that username registered");
     }
 
     const isAuth = await argon2.verify(user.password, password);
     if (!isAuth) {
-      return res.status(400).json("Incorrect password");
+      return res.status(401).json("Incorrect password");
     }
 
     req.session!.username = user.username;
@@ -96,5 +96,5 @@ export async function loginUser(req: Request, res: Response) {
 
 export function logoutUser(req: Request, res: Response) {
   req.session = null;
-  res.status(200).json({ message: "Logged out successfully" });
+  res.status(204).json({ message: "Logged out successfully" });
 }

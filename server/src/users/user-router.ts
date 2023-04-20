@@ -13,8 +13,8 @@ const userRouter = express
   .get("/api/users", adminAuth, getAllUsers)
   // .get("/users/auth", adminAuth, getSelf)
   .post("/api/users/register", registerUser)
-  .post("/api/login", loginUser)
-  .post("/api/logout", logoutUser);
+  .post("/api/users/login", loginUser)
+  .post("/api/users/logout", logoutUser);
 
 // Delete user
 // Update user
