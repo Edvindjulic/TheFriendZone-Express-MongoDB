@@ -5,17 +5,11 @@ export async function registerUser(req: Request, res: Response) {
   try {
     const { username, password, isAdmin = false } = req.body;
 
-    // const existingUser = await userCollection.findOne({ username });
-    // // console.log(existingUser);
-    // if (existingUser) {
-    //   return res.status(409).json({
-    //     message: "Username already in use",
-    //     error: "Username already in use",
-    //   });
-    // }
-
-    // const users = await UserModel.find({});
-    // console.log(users);
+    const users = await UserModel.find({ username: username });
+    if (users.length > 0) {
+      res.set("content-type", "application/json");
+      return res.status(409).send(JSON.stringify("Username already in use"));
+    }
 
     const hashedPassword = await argon2.hash(password);
     const user = { username, password: hashedPassword, isAdmin };
@@ -29,13 +23,17 @@ export async function registerUser(req: Request, res: Response) {
       _id: result._id,
     };
 
-    res.status(201).json(responseObj);
+    res.set("content-type", "application/json");
+    res.status(201).send(JSON.stringify(responseObj));
   } catch (error) {
     console.error("Error inserting user:", error);
-    res.status(500).send({
-      message: "Error inserting user",
-      error: (error as any).message,
-    });
+    res.set("content-type", "application/json");
+    res.status(500).send(
+      JSON.stringify({
+        message: "Error inserting user",
+        error: (error as any).message,
+      })
+    );
   }
 }
 
