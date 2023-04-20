@@ -1,38 +1,38 @@
 import argon2 from "argon2";
 import { Request, Response } from "express";
-import { db } from "../app";
+import { UserModel } from "./user-model";
 export async function registerUser(req: Request, res: Response) {
   try {
     const { username, password, isAdmin = false } = req.body;
-    const hashedPassword = await argon2.hash(password);
-    const userCollection = db.collection("users");
-    const user = { username, password: hashedPassword, isAdmin };
 
-    const result = await userCollection.insertOne(user);
-
-    // const allUsers = await userCollection.find().toArray();
-    // const usernameCheck = allUsers.find((user) => user.username === username);
-
-    // if (usernameCheck) {
-    //   return res.status(400).json({
+    // const existingUser = await userCollection.findOne({ username });
+    // // console.log(existingUser);
+    // if (existingUser) {
+    //   return res.status(409).json({
     //     message: "Username already in use",
     //     error: "Username already in use",
     //   });
     // }
 
+    // const users = await UserModel.find({});
+    // console.log(users);
+
+    const hashedPassword = await argon2.hash(password);
+    const user = { username, password: hashedPassword, isAdmin };
+
+    const result = await UserModel.create(user);
+
     const responseObj = {
       message: "User inserted",
       ...user,
       password: undefined,
-      _id: result.insertedId.toString(),
+      _id: result._id,
     };
-
-    console.log("Response object:", responseObj);
 
     res.status(201).json(responseObj);
   } catch (error) {
     console.error("Error inserting user:", error);
-    res.status(500).json({
+    res.status(500).send({
       message: "Error inserting user",
       error: (error as any).message,
     });
