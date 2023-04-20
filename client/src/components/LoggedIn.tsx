@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   Button,
+  Grid,
   TextField,
   ThemeProvider,
   Toolbar,
@@ -31,39 +32,35 @@ function LoggedIn() {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            padding: "1.2rem",
-
-            borderRadius: ".3rem",
-            marginBottom: ".5rem",
-          }}
-        >
-          <Box sx={{ width: "100%" }}>
-            <TextField
-              fullWidth
-              label="Skriv ditt inlägg..."
-              variant="outlined"
-              size="medium"
-              value={postText}
-              onChange={(e) => setPostText(e.target.value)}
-            />
-          </Box>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handlePostSubmit}
-            sx={{
-              marginLeft: "10px",
-              "&:hover": {
-                backgroundColor: "#E3653D",
-              },
-            }}
-          >
-            Posta
-          </Button>
+        <Box sx={{ padding: "1.2rem" }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={9}>
+              <TextField
+                fullWidth
+                label="Skriv ditt inlägg..."
+                variant="outlined"
+                size="medium"
+                value={postText}
+                onChange={(e) => setPostText(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handlePostSubmit}
+                fullWidth
+                sx={{
+                  marginTop: { xs: 2, sm: 0 },
+                  "&:hover": {
+                    backgroundColor: "",
+                  },
+                }}
+              >
+                Posta
+              </Button>
+            </Grid>
+          </Grid>
         </Box>
         <Posts />
       </div>
