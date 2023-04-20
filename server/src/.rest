@@ -18,25 +18,3 @@ Content-Type: application/json
     "password": "1337admin"
 }
 
-### Logout
-POST http://localhost:3000/logout
-
-### Get all users
-GET http://localhost:3000/users
-
-
-### Get all posts
-GET http://localhost:3000/posts
-
-
-### Get Specific Post
-GET http://localhost:3000/posts/643fe89a77695257992378ce
-
-### Post a post(postception)
-POST http://localhost:3000/posts
-Content-Type: application/json
-
-{
-  "content": "this is a post2!"
-}
-
