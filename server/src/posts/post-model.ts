@@ -12,4 +12,7 @@ const postSchema = new mongoose.Schema({
   //author
 });
 
-export default mongoose.model("Post", postSchema);
+export type Post = mongoose.InferSchemaType<typeof postSchema>;
+
+export const PostModel = mongoose.model("Post", postSchema);
+export default PostModel;

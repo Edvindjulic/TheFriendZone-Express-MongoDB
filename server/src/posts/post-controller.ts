@@ -24,12 +24,14 @@ export async function createPost(req: Request, res: Response) {
 
     const postCollection = db.collection("posts");
 
-    const post = new postModel({ content });
+    const post = new postModel({ content /* author: req.session!.user */ });
     const result = await postCollection.insertOne(post);
     res.status(201).json({ message: "Post created", data: post });
   } catch (error) {
     console.error("Error creating post:", error);
-    res.status(500).json({ message: "Error creating post", error: (error as any).message });
+    res
+      .status(500)
+      .json({ message: "Error creating post", error: (error as any).message });
   }
 }
 //currently not working!
@@ -48,7 +50,9 @@ export async function getPostById(req: Request, res: Response) {
   } catch (error) {
     console.error("Error finding post", error);
     {
-      res.status(500).json({ message: "Error finding post", error: (error as any).message });
+      res
+        .status(500)
+        .json({ message: "Error finding post", error: (error as any).message });
     }
   }
 }
