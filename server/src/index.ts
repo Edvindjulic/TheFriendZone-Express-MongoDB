@@ -4,4 +4,4 @@
 // ÄNDRA INTE FÖLJANDE KOD!
 export * from "./app";
 export { Post, PostModel } from "./posts/post-model";
-// export { User, UserModel } from './resources/users/user-model';
+export { User, UserModel } from "./users/user-model";
