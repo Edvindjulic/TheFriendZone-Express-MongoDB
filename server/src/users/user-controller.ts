@@ -1,36 +1,35 @@
 import argon2 from "argon2";
 import { Request, Response } from "express";
 import { db } from "../app";
-
 export async function registerUser(req: Request, res: Response) {
   try {
-    const { username, email, password, admin } = req.body;
+    const { username, password, isAdmin = false } = req.body;
     const hashedPassword = await argon2.hash(password);
     const userCollection = db.collection("users");
-    const user = { username, email, password: hashedPassword, admin };
-
-    const allUsers = await userCollection.find().toArray();
-
-    const mailCheck = allUsers.find((user) => user.email === email);
-    const usernameCheck = allUsers.find((user) => user.username === username);
-    if (mailCheck) {
-      return res.status(400).json({
-        message: "Email already in use",
-        error: "Email already in use",
-      });
-    }
-    if (usernameCheck) {
-      return res.status(400).json({
-        message: "Username already in use",
-        error: "Username already in use",
-      });
-    }
+    const user = { username, password: hashedPassword, isAdmin };
 
     const result = await userCollection.insertOne(user);
-    res.status(201).json({
+
+    // const allUsers = await userCollection.find().toArray();
+    // const usernameCheck = allUsers.find((user) => user.username === username);
+
+    // if (usernameCheck) {
+    //   return res.status(400).json({
+    //     message: "Username already in use",
+    //     error: "Username already in use",
+    //   });
+    // }
+
+    const responseObj = {
       message: "User inserted",
-      data: { ...user, _id: result.insertedId },
-    });
+      ...user,
+      password: undefined,
+      _id: result.insertedId.toString(),
+    };
+
+    console.log("Response object:", responseObj);
+
+    res.status(201).json(responseObj);
   } catch (error) {
     console.error("Error inserting user:", error);
     res.status(500).json({
