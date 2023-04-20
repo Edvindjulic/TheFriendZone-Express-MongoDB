@@ -110,7 +110,7 @@ export default function SignInSide() {
                 </Button>
               </Grid>
               <Grid item xs={12}>
-                <Link href="#" variant="body2">
+                <Link href="signup" variant="body2">
                   {
                     "Har du inget konto? Registrera dig här"
                   }
