@@ -1,4 +1,4 @@
-import { Copyright } from "@mui/icons-material";
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -10,15 +10,12 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import * as React from "react";
 import logo from "../assets/logo.png";
+import Posts from "./PostComponent";
 
-export default function SignInSide() {
-  const handleSubmit = (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+export default function SignIn() {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(
-      event.currentTarget
-    );
+    const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
       password: data.get("password"),
@@ -26,22 +23,10 @@ export default function SignInSide() {
   };
 
   return (
-    <Grid
-      container
-      component="main"
-      sx={{ height: "100vh" }}
-    >
+    <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} />
-      <Grid
-        item
-        xs={12}
-        sm={8}
-        md={5}
-        component={Paper}
-        elevation={6}
-        square
-      >
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        {/* Logga in form */}
         <Box
           sx={{
             my: 8,
@@ -80,18 +65,10 @@ export default function SignInSide() {
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={
-                <Checkbox
-                  value="remember"
-                  color="primary"
-                />
-              }
+              control={<Checkbox value="remember" color="primary" />}
               label="Kom ihåg mig"
             />
-            <Grid
-              container
-              sx={{ textAlign: "center" }}
-            >
+            <Grid container sx={{ textAlign: "center" }}>
               <Grid item xs={12}>
                 <Button
                   type="submit"
@@ -118,6 +95,18 @@ export default function SignInSide() {
               </Grid>
             </Grid>
           </Box>
+        </Box>
+      </Grid>
+      <Grid item xs={12} sm={4} md={7}>
+        {/* Inläggs-kortet */}
+        <Box sx={{ mx: 4, my: 2 }}>
+          <Typography
+            variant="h5"
+            sx={{ marginBottom: 2, textAlign: "center" }}
+          >
+            Senaste inlägg
+          </Typography>
+          <Posts />
         </Box>
       </Grid>
     </Grid>
