@@ -9,7 +9,6 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import * as React from "react";
 import logo from "../assets/logo.png";
-import Posts from "./PostComponent";
 
 export default function SignIn() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -96,9 +95,6 @@ export default function SignIn() {
       </Grid>
       <Grid item xs={12} sm={4} md={7}>
         {/* Inläggs-kortet */}
-        <Box sx={{ mx: 4, my: 2 }}>
-          <Posts />
-        </Box>
       </Grid>
     </Grid>
   );
