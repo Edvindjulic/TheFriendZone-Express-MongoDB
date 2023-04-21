@@ -1,19 +1,16 @@
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import { useContext } from "react";
+import { PostContext } from "../Context/PostContext";
 
 export default function Posts() {
-  const cardData = [
-    { title: "Card 1", content: "Detta är mitt inlägg som jag skriver här 1" },
-    { title: "Card 2", content: "Detta är mitt inlägg som jag skriver här 2" },
-    { title: "Card 3", content: "TDetta är mitt inlägg som jag skriver här 3" },
-    { title: "Card 4", content: "Detta är mitt inlägg som jag skriver här 4" },
-  ];
+  const { posts } = useContext(PostContext);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-      {cardData.map((card) => (
+      {posts.map((post, index) => (
         <Paper
-          key={card.title}
+          key={index}
           elevation={2}
           sx={{
             p: 7,
@@ -24,8 +21,8 @@ export default function Posts() {
             height: "10vh",
           }}
         >
-          <h4>{card.title}</h4>
-          <p>{card.content}</p>
+          <h4>{post.title}</h4>
+          <p>{post.content}</p>
         </Paper>
       ))}
     </Box>
