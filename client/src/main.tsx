@@ -9,6 +9,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import App from "./App";
+import LoggedIn from "./components/LoggedIn";
 import { theme } from "./components/theme";
 import "./index.css";
 import Admin from "./pages/Admin";
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route path="profile" element={<Profile />} />
       <Route path="admin" element={<Admin />} />
       <Route path="signup" element={<Signup />} />
+      <Route path="loggedIn" element={<LoggedIn />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Route>
   )
