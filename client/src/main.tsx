@@ -13,6 +13,7 @@ import { theme } from "./components/theme";
 import "./index.css";
 import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
+import Signup from "./pages/Signup";
 import Startpage from "./pages/Startpage";
 
 const router = createBrowserRouter(
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
         element={<Profile />}
       />
       <Route path="admin" element={<Admin />} />
+      <Route path="signup" element={<Signup />} />
       <Route
         path="*"
         element={<Navigate to="/" />}

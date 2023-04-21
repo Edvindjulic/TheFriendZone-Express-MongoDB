@@ -87,8 +87,10 @@ export default function SignIn() {
                 </Button>
               </Grid>
               <Grid item xs={12}>
-                <Link href="#" variant="body2">
-                  {"Har du inget konto? Registrera dig här"}
+                <Link href="signup" variant="body2">
+                  {
+                    "Har du inget konto? Registrera dig här"
+                  }
                 </Link>
               </Grid>
             </Grid>

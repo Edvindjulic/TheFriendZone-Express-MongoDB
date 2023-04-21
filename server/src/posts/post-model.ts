@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import User from "./users/user-model";
+import mongoose, { SchemaTypes } from "mongoose";
 
 const postSchema = new mongoose.Schema({
   title: {
@@ -11,9 +10,13 @@ const postSchema = new mongoose.Schema({
     required: true,
   },
   author: {
-    type: User,
+    type: SchemaTypes.ObjectId,
   },
 });
+
+interface Author {
+  _id: string;
+}
 
 export type Post = mongoose.InferSchemaType<typeof postSchema>;
 

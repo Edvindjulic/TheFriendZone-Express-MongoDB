@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
-import { app, client } from "./app";
+import { app } from "./app";
 
 // HÄR SKRIVER NI KODEN FÖR ATT ANSLUTA TILL DATABASEN OCH STARTA SERVERN!
 async function main() {
+  await mongoose.connect(
+    "mongodb+srv://superuser:DiiWV2H7irGTztEK@clusterfudge.wfhk6bq.mongodb.net/thefriendzone?retryWrites=true&w=majority"
+  );
   mongoose.set("strictQuery", true);
-  await client.connect();
   console.log("Connected to Atlas cluster fudge");
 
   app.listen(3000, () => {
