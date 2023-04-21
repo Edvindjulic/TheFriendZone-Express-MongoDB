@@ -28,8 +28,8 @@ export async function registerUser(req: Request, res: Response) {
       return res.status(409).send(JSON.stringify("Username already in use"));
     }
 
-    const hashedPassword = await argon2.hash(password);
-    user.password = hashedPassword;
+    // const hashedPassword = await argon2.hash(password);
+    // user.password = hashedPassword;
 
     const result = await user.save();
 
@@ -68,10 +68,10 @@ export async function getAllUsers(req: Request, res: Response) {
 }
 
 export async function loginUser(req: Request, res: Response) {
-  const { username, password } = req.body;
+  const { password } = req.body;
 
   try {
-    const user = await UserModel.findOne({ username: username });
+    const user = await UserModel.findOne({ username: req.body.username });
     if (!user) {
       return res.status(401).json("No user with that username registered");
     }
@@ -83,8 +83,10 @@ export async function loginUser(req: Request, res: Response) {
 
     req.session!.username = user.username;
     req.session!.isAdmin = user.isAdmin === true;
+    req.session!._id = user._id;
+    console.log(req.session);
 
-    res.status(200).json("Login successful!");
+    res.status(200).json(req.session);
   } catch (error) {
     console.error("Error finding user:", error);
     res.status(500).json({
