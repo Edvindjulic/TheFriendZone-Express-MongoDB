@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -88,9 +87,7 @@ export default function SignIn() {
               </Grid>
               <Grid item xs={12}>
                 <Link href="signup" variant="body2">
-                  {
-                    "Har du inget konto? Registrera dig här"
-                  }
+                  {"Har du inget konto? Registrera dig här"}
                 </Link>
               </Grid>
             </Grid>
@@ -100,12 +97,6 @@ export default function SignIn() {
       <Grid item xs={12} sm={4} md={7}>
         {/* Inläggs-kortet */}
         <Box sx={{ mx: 4, my: 2 }}>
-          <Typography
-            variant="h5"
-            sx={{ marginBottom: 2, textAlign: "center" }}
-          >
-            Senaste inlägg
-          </Typography>
           <Posts />
         </Box>
       </Grid>
