@@ -57,7 +57,14 @@ export async function getAllUsers(req: Request, res: Response) {
   try {
     const users = await UserModel.find(); // retrieve all users from the database
 
-    res.status(200).json({ message: "All users", data: users });
+    // Remove the password field from each user object
+    const usersWithoutPassword = users.map((user) => {
+      const { password, ...rest } = user.toObject();
+      return rest;
+    });
+
+    // Send the array directly in the response
+    res.status(200).json(usersWithoutPassword);
   } catch (error) {
     console.error("Error finding users:", error);
     res.status(500).json({
@@ -84,7 +91,6 @@ export async function loginUser(req: Request, res: Response) {
     req.session!.username = user.username;
     req.session!.isAdmin = user.isAdmin === true;
     req.session!._id = user._id;
-    console.log(req.session);
 
     res.status(200).json(req.session);
   } catch (error) {
