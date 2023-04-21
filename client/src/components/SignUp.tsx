@@ -79,7 +79,6 @@ export default function SignUpForm() {
         noValidate
         onSubmit={formik.handleSubmit}
       >
-        <form onSubmit={formik.handleSubmit}>
           <TextField
             id="email"
             name="email"
@@ -157,7 +156,6 @@ export default function SignUpForm() {
           >
             Skapa konto
           </Button>
-        </form>
       </Box>
     </Paper>
   );

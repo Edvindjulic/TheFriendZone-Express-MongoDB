@@ -36,8 +36,6 @@ export default function SignIn() {
             alignItems: "center",
           }}
         >
-          <img src={logo} alt="Logo" />
-
           <Box
             component="form"
             noValidate
