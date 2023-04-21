@@ -9,11 +9,11 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import App from "./App";
-import LoggedIn from "./components/LoggedIn";
 import { theme } from "./components/theme";
 import "./index.css";
 import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
+import Signup from "./pages/Signup";
 import Startpage from "./pages/Startpage";
 
 const router = createBrowserRouter(
@@ -22,7 +22,7 @@ const router = createBrowserRouter(
       <Route index element={<Startpage />} />
       <Route path="profile" element={<Profile />} />
       <Route path="admin" element={<Admin />} />
-      <Route path="login" element={<LoggedIn />} />
+      <Route path="signup" element={<Signup />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Route>
   )
