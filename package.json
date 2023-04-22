@@ -2,6 +2,7 @@
   "scripts": {
     "test": "cd server && npm test",
     "frontend": "cd client && npm run dev",
-    "backend": "cd server && npm run dev"
+    "backend": "cd server && npm run dev",
+    "all": "npm run frontend & npm run backend"
   }
 }
