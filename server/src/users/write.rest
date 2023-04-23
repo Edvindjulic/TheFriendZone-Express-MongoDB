@@ -1,5 +1,5 @@
 ### Post a post(postception)
-POST http://localhost:3000/posts
+POST http://localhost:3000/api/posts
 Content-Type: application/json
 
 {
