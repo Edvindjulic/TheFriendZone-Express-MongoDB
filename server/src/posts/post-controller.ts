@@ -1,5 +1,17 @@
 import { Request, Response } from "express";
+import { UpdateWriteOpResult } from "mongodb";
 import { PostModel } from "./post-model";
+
+interface CastError extends Error {
+  name: "CastError";
+  kind: "ObjectId";
+}
+
+interface UpdateResult {
+  n: number;
+  nModified?: number;
+  ok: number;
+}
 
 export async function createPost(req: Request, res: Response) {
   try {
@@ -29,11 +41,6 @@ export async function createPost(req: Request, res: Response) {
       })
     );
   }
-}
-
-interface CastError extends Error {
-  name: "CastError";
-  kind: "ObjectId";
 }
 
 export async function getAllPosts(req: Request, res: Response) {
@@ -68,10 +75,7 @@ export async function getPostById(req: Request, res: Response) {
       console.log(post);
     }
   } catch (error: CastError | unknown) {
-    if (
-      (error as CastError).name === "CastError" &&
-      (error as CastError).kind === "ObjectId"
-    ) {
+    if ((error as CastError).name === "CastError" && (error as CastError).kind === "ObjectId") {
       res.status(404).json({ message: `${id} not found!` });
     } else {
       console.error("Error finding post", error);
@@ -80,6 +84,28 @@ export async function getPostById(req: Request, res: Response) {
         error: (error as any).message,
       });
     }
+  }
+}
+
+export async function updatePost(req: Request, res: Response) {
+  const postId = req.params.id;
+  const { title, content } = req.body;
+  if (!title || !content) {
+    return res.status(400).json("Title and content required");
+  }
+
+  try {
+    const result = await PostModel.findByIdAndUpdate({ _id: postId }, { title, content });
+    if ((result as UpdateWriteOpResult).modifiedCount === 0) {
+      return res.status(404).json("Post not found");
+    }
+    const updatedPost = await PostModel.findById(postId);
+    // console.log(postId.length);
+    res.status(200).json(updatedPost);
+    console.log(updatedPost);
+    console.log(req.body);
+  } catch (error) {
+    return res.status(500).json(error);
   }
 }
 
