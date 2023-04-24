@@ -1,6 +1,36 @@
 import { Request, Response } from "express";
 import { PostModel } from "./post-model";
 
+export async function createPost(req: Request, res: Response) {
+  try {
+    const incomingPost = req.body;
+
+    const newPost = new PostModel({
+      ...incomingPost,
+      author: req.session?._id,
+    });
+
+    const result = await newPost.save();
+
+    const responseObj = {
+      message: "Post created",
+      ...result.toJSON(),
+    };
+
+    res.set("content-type", "application/json");
+    res.status(201).send(JSON.stringify(responseObj));
+  } catch (error) {
+    console.error("Error inserting user:", error);
+    res.set("content-type", "application/json");
+    res.status(500).send(
+      JSON.stringify({
+        message: "Error inserting user",
+        error: (error as any).message,
+      })
+    );
+  }
+}
+
 interface CastError extends Error {
   name: "CastError";
   kind: "ObjectId";
@@ -20,23 +50,11 @@ export async function getAllPosts(req: Request, res: Response) {
   }
 }
 
-export async function createPost(req: Request, res: Response) {
-  try {
-    const incomingPost = req.body;
-
-    const newPost = new PostModel({
-      ...incomingPost,
-      author: req.session?._id,
-    });
-
-    const result = await newPost.save();
+export async function getPostById(req: Request, res: Response) {
+  const id = req.params.id;
 
   try {
     const post = await PostModel.findById(id);
-    const responseObj = {
-      message: "Post created",
-      ...result.toJSON(),
-    };
 
     if (post) {
       res.status(200).json({
@@ -50,7 +68,10 @@ export async function createPost(req: Request, res: Response) {
       console.log(post);
     }
   } catch (error: CastError | unknown) {
-    if ((error as CastError).name === "CastError" && (error as CastError).kind === "ObjectId") {
+    if (
+      (error as CastError).name === "CastError" &&
+      (error as CastError).kind === "ObjectId"
+    ) {
       res.status(404).json({ message: `${id} not found!` });
     } else {
       console.error("Error finding post", error);
@@ -59,20 +80,5 @@ export async function createPost(req: Request, res: Response) {
         error: (error as any).message,
       });
     }
-    res.set("content-type", "application/json");
-    res.status(201).send(JSON.stringify(responseObj));
-  } catch (error) {
-    console.error("Error inserting user:", error);
-    res.set("content-type", "application/json");
-    res.status(500).send(
-      JSON.stringify({
-        message: "Error inserting user",
-        error: (error as any).message,
-      })
-    );
   }
-}
-
-function expect(status: (code: number) => Response<any, Record<string, any>>) {
-  throw new Error("Function not implemented.");
 }
