@@ -16,24 +16,19 @@ export async function getAllPosts(req: Request, res: Response) {
 }
 
 export async function createPost(req: Request, res: Response) {
-  try {
-    const { title, content } = req.body;
-    const author = req.session!.user._id;
+  const myPost = new PostModel(req.body);
 
-    const post = new PostModel({
-      title,
-      content,
-      author,
-    });
-    await post.save();
-    res.status(201).json({ message: "Post created", post });
-  } catch (error) {
-    console.error("Error creating post:", error);
-    res.status(500).json({
-      message: "Error creating post",
-      error: (error as any).message,
-    });
-  }
+  // const authorIdString = req.session.
+  console.log(!req.session);
+
+  const newPost = await myPost.save();
+
+  res.status(201).json({
+    message: "post added to database",
+    _id: newPost._id,
+    title: newPost.title,
+    content: newPost.content,
+  });
 }
 //currently not working!
 export async function getPostById(req: Request, res: Response) {
