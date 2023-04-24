@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 import { PostModel } from "./post-model";
 
 export async function getAllPosts(req: Request, res: Response) {
   try {
     const posts = await PostModel.find();
 
-    res.status(200).json({ message: "All posts", data: posts });
+    res.status(200).json(posts);
   } catch (error) {
     console.error("Error finding posts", error);
     res.status(500).json({
@@ -17,9 +18,15 @@ export async function getAllPosts(req: Request, res: Response) {
 
 export async function createPost(req: Request, res: Response) {
   const myPost = new PostModel(req.body);
+  console.log(req.body);
+  console.log(req.session);
 
-  // const authorIdString = req.session.
-  console.log(!req.session);
+  const authorId = req.session?.user._id;
+  if (authorId && mongoose.Types.ObjectId.isValid(authorId)) {
+    myPost.author = authorId;
+  } else {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
 
   const newPost = await myPost.save();
 
@@ -28,9 +35,10 @@ export async function createPost(req: Request, res: Response) {
     _id: newPost._id,
     title: newPost.title,
     content: newPost.content,
+    author: newPost.author?.toString(),
   });
 }
-//currently not working!
+
 export async function getPostById(req: Request, res: Response) {
   const id = req.params.id;
 
@@ -51,4 +59,7 @@ export async function getPostById(req: Request, res: Response) {
       });
     }
   }
+}
+function expect(status: (code: number) => Response<any, Record<string, any>>) {
+  throw new Error("Function not implemented.");
 }
