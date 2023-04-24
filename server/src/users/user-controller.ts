@@ -1,26 +1,37 @@
 import argon2 from "argon2";
 import { Request, Response } from "express";
 import { UserModel } from "./user-model";
+
+// const userSchema = yup.object().shape({
+//   username: yup.string(),
+//   password: yup.string(),
+// });
+
 export async function registerUser(req: Request, res: Response) {
   try {
     const { username, password, isAdmin = false } = req.body;
-    const user = new UserModel({ username, password, isAdmin });
+    const user = { username, password, isAdmin };
 
-    // Check for missing or incorrect values
-    if (!username || typeof username !== "string") {
-      const message =
-        "Invalid request: Username is missing or has an incorrect format";
+    // TODO: THIS IS A HACK?!
+    if (
+      typeof user.username !== "string" ||
+      typeof user.password !== "string"
+    ) {
       res.set("content-type", "application/json");
-      return res.status(400).send(JSON.stringify({ message }));
+      return res
+        .status(400)
+        .send(JSON.stringify("Username and password must be a strings"));
     }
 
-    if (!password || typeof password !== "string") {
-      const message =
-        "Invalid request: Password is missing or has an incorrect format";
-      res.set("content-type", "application/json");
-
-      return res.status(400).send(JSON.stringify({ message }));
-    }
+    // try {
+    //   await userSchema.validate(user);
+    //   console.log("Validation passed");
+    // } catch (error) {
+    //   console.log("Validation failed:");
+    //   console.error(error);
+    //   res.set("content-type", "application/json");
+    //   return res.status(400).send(JSON.stringify(error.message));
+    // }
 
     const users = await UserModel.find({ username: username });
     if (users.length > 0) {
@@ -28,10 +39,7 @@ export async function registerUser(req: Request, res: Response) {
       return res.status(409).send(JSON.stringify("Username already in use"));
     }
 
-    // const hashedPassword = await argon2.hash(password);
-    // user.password = hashedPassword;
-
-    const result = await user.save();
+    const result = await UserModel.create(user);
 
     const responseObj = {
       message: "User inserted",
