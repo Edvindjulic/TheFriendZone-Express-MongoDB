@@ -1,3 +1,4 @@
+import argon2 from "argon2";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -13,6 +14,11 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+});
+
+userSchema.pre("save", async function (next) {
+  this.password = await argon2.hash(this.password);
+  next();
 });
 
 export type User = mongoose.InferSchemaType<typeof userSchema>;
