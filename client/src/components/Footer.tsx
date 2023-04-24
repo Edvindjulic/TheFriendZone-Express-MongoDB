@@ -5,6 +5,7 @@ export default function Footer() {
     <Box
       sx={{
         height: "auto",
+        width: "100%",
       }}
     >
       <Typography

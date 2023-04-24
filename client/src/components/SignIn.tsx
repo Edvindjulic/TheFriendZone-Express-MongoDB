@@ -1,5 +1,7 @@
 import { Box, Button, Paper, TextField } from "@mui/material";
+import { NavLink } from "react-router-dom";
 import { useFormik } from "formik";
+import styled from "@emotion/styled";
 
 interface SigninValues {
   username: string;
@@ -18,14 +20,20 @@ export default function SignInForm() {
     },
   });
 
+  const StyledNavLink = styled(NavLink)({
+    textDecoration: "none",
+    color: "black"
+  });
+
   return (
     <Paper
       elevation={6}
       sx={{
-        width: "40%",
+        width: "100%",
         margin: "auto",
         display: "flex",
         alignItems: "center",
+        textAlign: "center",
         justifyContent: "center",
       }}
     >
@@ -59,6 +67,9 @@ export default function SignInForm() {
           helperText={
             formik.touched.username && formik.errors.username
           }
+          sx={{
+            backgroundColor: "white"
+          }}
         />
         <TextField
           id="password"
@@ -74,10 +85,14 @@ export default function SignInForm() {
           helperText={
             formik.touched.password && formik.errors.password
           }
+          sx={{
+            backgroundColor: "white"
+          }}
         />
         <Button color="secondary" type="submit" variant="contained">
           Logga in
         </Button>
+        <StyledNavLink to="/signup">Har du inget konto? Skapa ett här!</StyledNavLink>
       </Box>
     </Paper>
   );

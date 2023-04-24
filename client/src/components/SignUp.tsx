@@ -73,6 +73,12 @@ export default function SignUpForm() {
           helperText={
             formik.touched.username && formik.errors.username
           }
+          InputProps={{
+            sx: { backgroundColor: "white"},
+          }}
+          FormHelperTextProps={{
+            sx: { backgroundColor: "transparent"}
+          }}
         />
         <TextField
           id="password"
@@ -88,6 +94,12 @@ export default function SignUpForm() {
           helperText={
             formik.touched.password && formik.errors.password
           }
+          InputProps={{
+            sx: { backgroundColor: "white"},
+          }}
+          FormHelperTextProps={{
+            sx: { backgroundColor: "transparent"}
+          }}
         />
         <TextField
           id="confirmPassword"
@@ -105,6 +117,12 @@ export default function SignUpForm() {
             formik.touched.confirmPassword &&
             formik.errors.confirmPassword
           }
+          InputProps={{
+            sx: { backgroundColor: "white"},
+          }}
+          FormHelperTextProps={{
+            sx: { backgroundColor: "transparent"}
+          }}
         />
         <Button color="secondary" type="submit" variant="contained">
           Skapa konto
