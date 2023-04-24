@@ -1,11 +1,9 @@
 import express from "express";
-import { createPost, getAllPosts, getPostById } from "./post-controller";
+import { createBook } from "./post-controller";
 
-const postRouter = express
-  .Router()
-  .get("/posts", getAllPosts)
-  .get("/posts/:id", getPostById) // not working
-  .post("/posts", createPost);
+const postRouter = express.Router().post("/api/posts", createBook);
+// .get("/posts", getAllPosts)
+// .get("/posts/:id", getPostById) // not working
 
 //TODO:
 

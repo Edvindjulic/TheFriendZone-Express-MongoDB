@@ -9,7 +9,10 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  //author
+  author: {
+    type: String,
+    required: true,
+  },
 });
 
 export type Post = mongoose.InferSchemaType<typeof postSchema>;

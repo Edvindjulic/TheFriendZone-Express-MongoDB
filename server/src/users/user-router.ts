@@ -13,11 +13,11 @@ import {
 const userRouter = express
   .Router()
   .get("/api/users", adminAuth, getAllUsers)
-  // .get("/users/auth", adminAuth, getSelf)
   .post("/api/users/register", registerUser)
   .post("/api/users/login", loginUser)
   .post("/api/users/logout", logoutUser)
   .put("/api/users/:id", adminAuth, updateUser)
   .delete("/api/users/:id", adminAuth, deleteUser);
+// .get("/users/auth", adminAuth, getSelf)
 
 export default userRouter;
