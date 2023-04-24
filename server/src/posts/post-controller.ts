@@ -1,6 +1,35 @@
 import { Request, Response } from "express";
-import mongoose from "mongoose";
 import { PostModel } from "./post-model";
+
+export async function createPost(req: Request, res: Response) {
+  try {
+    const incomingPost = req.body;
+
+    const newPost = new PostModel({
+      ...incomingPost,
+      author: req.session?._id,
+    });
+
+    const result = await newPost.save();
+
+    const responseObj = {
+      message: "Post created",
+      ...result.toJSON(),
+    };
+
+    res.set("content-type", "application/json");
+    res.status(201).send(JSON.stringify(responseObj));
+  } catch (error) {
+    console.error("Error inserting user:", error);
+    res.set("content-type", "application/json");
+    res.status(500).send(
+      JSON.stringify({
+        message: "Error inserting user",
+        error: (error as any).message,
+      })
+    );
+  }
+}
 
 interface CastError extends Error {
   name: "CastError";
@@ -21,29 +50,6 @@ export async function getAllPosts(req: Request, res: Response) {
   }
 }
 
-export async function createPost(req: Request, res: Response) {
-  const myPost = new PostModel(req.body);
-  console.log(req.body);
-  console.log(req.session);
-
-  const authorId = req.session?.user._id;
-  if (authorId && mongoose.Types.ObjectId.isValid(authorId)) {
-    myPost.author = authorId;
-  } else {
-    return res.status(400).json({ message: "Invalid user ID" });
-  }
-
-  const newPost = await myPost.save();
-
-  res.status(201).json({
-    message: "post added to database",
-    _id: newPost._id,
-    title: newPost.title,
-    content: newPost.content,
-    author: newPost.author?.toString(),
-  });
-}
-
 export async function getPostById(req: Request, res: Response) {
   const id = req.params.id;
 
@@ -62,7 +68,10 @@ export async function getPostById(req: Request, res: Response) {
       console.log(post);
     }
   } catch (error: CastError | unknown) {
-    if ((error as CastError).name === "CastError" && (error as CastError).kind === "ObjectId") {
+    if (
+      (error as CastError).name === "CastError" &&
+      (error as CastError).kind === "ObjectId"
+    ) {
       res.status(404).json({ message: `${id} not found!` });
     } else {
       console.error("Error finding post", error);
@@ -72,8 +81,4 @@ export async function getPostById(req: Request, res: Response) {
       });
     }
   }
-}
-
-function expect(status: (code: number) => Response<any, Record<string, any>>) {
-  throw new Error("Function not implemented.");
 }
