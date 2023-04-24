@@ -1,17 +1,19 @@
 import { Request, Response } from "express";
 import PostModel from "./post-model";
 
-export async function skapaPost(req: Request, res: Response) {
+export async function createPost(req: Request, res: Response) {
   try {
     const incomingPost = req.body;
-    console.log(incomingPost);
-    console.log("this is the req.session id:", req.session?._id);
-    const user = new PostModel({ ...incomingPost, author: req.session?._id });
 
-    const result = await user.save();
+    const newPost = new PostModel({
+      ...incomingPost,
+      author: req.session?._id,
+    });
+
+    const result = await newPost.save();
 
     const responseObj = {
-      message: "Post inserted",
+      message: "Post created",
       ...result.toJSON(),
     };
 

@@ -1,9 +1,9 @@
 import express from "express";
 import { auth } from "../middlewares";
-import { skapaPost } from "./post-controller";
+import { createPost } from "./post-controller";
 
-const postRouter = express.Router().post("/api/posts", auth, skapaPost);
-// .get("/posts", getAllPosts)
+const postRouter = express.Router().post("/api/posts", auth, createPost);
+// .get("/api/posts", getAllPosts);
 // .get("/posts/:id", getPostById) // not working
 
 //TODO:
