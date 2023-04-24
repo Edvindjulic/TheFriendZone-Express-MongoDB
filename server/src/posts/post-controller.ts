@@ -82,3 +82,32 @@ export async function getPostById(req: Request, res: Response) {
     }
   }
 }
+
+export async function deletePost(req: Request, res: Response) {
+  try {
+    console.log("params id:", req.params.id);
+    const post = await PostModel.findById(req.params.id);
+
+    const loggedInUserId = req.session?._id;
+
+    if (!post || undefined) {
+      const responseOjb = req.params.id + "Post not found";
+      res.status(404).json(responseOjb);
+      return;
+    }
+    console.log(post?._id);
+
+    if (loggedInUserId !== post?.author?.toString()) {
+      res.status(403).json("You are not authorized to delete this post");
+      return;
+    }
+    await PostModel.findByIdAndDelete(req.params.id);
+
+    res.status(204).json(post);
+  } catch (error) {
+    res.status(404).json({
+      message: "Error finding the post",
+      error: (error as any).message,
+    });
+  }
+}
