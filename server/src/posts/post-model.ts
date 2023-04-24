@@ -1,21 +1,22 @@
-import mongoose from "mongoose";
+import { InferSchemaType, Schema, SchemaTypes, model } from "mongoose";
 
-const postSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
+const postSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    author: {
+      type: SchemaTypes.ObjectId,
+      ref: "user",
+    },
   },
-  content: {
-    type: String,
-    required: true,
-  },
-  author: {
-    type: String,
-    required: true,
-  },
-});
+  { versionKey: false }
+);
 
-export type Post = mongoose.InferSchemaType<typeof postSchema>;
-
-export const PostModel = mongoose.model("Post", postSchema);
-export default PostModel;
+export type Post = InferSchemaType<typeof postSchema>;
+export const PostModel = model("Post", postSchema);

@@ -1,5 +1,24 @@
 import { Request, Response } from "express";
-import PostModel from "./post-model";
+import { PostModel } from "./post-model";
+
+interface CastError extends Error {
+  name: "CastError";
+  kind: "ObjectId";
+}
+
+export async function getAllPosts(req: Request, res: Response) {
+  try {
+    const posts = await PostModel.find();
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error("Error finding posts", error);
+    res.status(500).json({
+      message: "Error finding posts",
+      error: (error as any).message,
+    });
+  }
+}
 
 export async function createPost(req: Request, res: Response) {
   try {
@@ -12,11 +31,34 @@ export async function createPost(req: Request, res: Response) {
 
     const result = await newPost.save();
 
+  try {
+    const post = await PostModel.findById(id);
     const responseObj = {
       message: "Post created",
       ...result.toJSON(),
     };
 
+    if (post) {
+      res.status(200).json({
+        _id: post._id,
+        title: post.title,
+        content: post.content,
+        author: post.author,
+      });
+    } else {
+      res.status(404).json(`${id} not found!`);
+      console.log(post);
+    }
+  } catch (error: CastError | unknown) {
+    if ((error as CastError).name === "CastError" && (error as CastError).kind === "ObjectId") {
+      res.status(404).json({ message: `${id} not found!` });
+    } else {
+      console.error("Error finding post", error);
+      res.status(500).json({
+        message: "Error finding post",
+        error: (error as any).message,
+      });
+    }
     res.set("content-type", "application/json");
     res.status(201).send(JSON.stringify(responseObj));
   } catch (error) {
@@ -29,4 +71,8 @@ export async function createPost(req: Request, res: Response) {
       })
     );
   }
+}
+
+function expect(status: (code: number) => Response<any, Record<string, any>>) {
+  throw new Error("Function not implemented.");
 }
