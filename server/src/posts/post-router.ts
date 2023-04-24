@@ -1,11 +1,12 @@
 import express from "express";
+import { auth } from "../middlewares";
 import { createPost, getAllPosts, getPostById } from "./post-controller";
 
 const postRouter = express
   .Router()
-  .get("/posts", getAllPosts)
-  .get("/posts/:id", getPostById) // not working
-  .post("/posts", createPost);
+  .get("/api/posts", getAllPosts)
+  .get("/api/posts/:id", getPostById) // not working
+  .post("/api/posts", auth, createPost);
 
 //TODO:
 

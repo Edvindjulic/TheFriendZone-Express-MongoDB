@@ -1,0 +1,10 @@
+### get
+GET http://localhost:3000/api/posts
+
+
+### get specific
+GET http://localhost:3000/api/posts/644637056745527662be6df3
+
+### get faulty
+
+GET http://localhost:3000/api/posts/31786312879369

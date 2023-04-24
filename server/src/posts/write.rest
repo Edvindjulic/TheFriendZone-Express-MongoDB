@@ -1,0 +1,10 @@
+###
+
+POST http://localhost:3000/api/posts
+
+Content-Type: application/json
+
+{
+  "title" : "hello this is post",
+  "content" : "hello post"
+}

@@ -28,8 +28,8 @@ export async function registerUser(req: Request, res: Response) {
       return res.status(409).send(JSON.stringify("Username already in use"));
     }
 
-    const hashedPassword = await argon2.hash(password);
-    user.password = hashedPassword;
+    // const hashedPassword = await argon2.hash(password);
+    // user.password = hashedPassword;
 
     const result = await user.save();
 
@@ -55,9 +55,14 @@ export async function registerUser(req: Request, res: Response) {
 
 export async function getAllUsers(req: Request, res: Response) {
   try {
-    const users = await UserModel.find(); // retrieve all users from the database
+    const users = await UserModel.find();
 
-    res.status(200).json({ message: "All users", data: users });
+    const usersWithoutPassword = users.map((user) => {
+      const { password, ...rest } = user.toObject();
+      return rest;
+    });
+
+    res.status(200).json(usersWithoutPassword);
   } catch (error) {
     console.error("Error finding users:", error);
     res.status(500).json({
@@ -68,10 +73,10 @@ export async function getAllUsers(req: Request, res: Response) {
 }
 
 export async function loginUser(req: Request, res: Response) {
-  const { username, password } = req.body;
+  const { password } = req.body;
 
   try {
-    const user = await UserModel.findOne({ username: username });
+    const user = await UserModel.findOne({ username: req.body.username });
     if (!user) {
       return res.status(401).json("No user with that username registered");
     }
@@ -83,8 +88,9 @@ export async function loginUser(req: Request, res: Response) {
 
     req.session!.username = user.username;
     req.session!.isAdmin = user.isAdmin === true;
+    req.session!._id = user._id;
 
-    res.status(200).json("Login successful!");
+    res.status(200).json(req.session);
   } catch (error) {
     console.error("Error finding user:", error);
     res.status(500).json({
@@ -97,4 +103,49 @@ export async function loginUser(req: Request, res: Response) {
 export function logoutUser(req: Request, res: Response) {
   req.session = null;
   res.status(204).json({ message: "Logged out successfully" });
+}
+
+export async function updateUser(req: Request, res: Response) {
+  try {
+    const userId = req.params.id;
+    const newIsAdmin = req.body.isAdmin;
+
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.isAdmin = newIsAdmin;
+    await user.save();
+
+    const { password, ...userWithoutPassword } = user.toObject();
+
+    res.status(200).json(userWithoutPassword);
+  } catch (error) {
+    console.error("Error updating user role:", error);
+    res.status(500).json({
+      message: "Error updating user role",
+      error: (error as any).message,
+    });
+  }
+}
+
+export async function deleteUser(req: Request, res: Response) {
+  try {
+    const userId = req.params.id;
+    const deletedUser = await UserModel.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(204).end();
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({
+      message: "Error deleting user",
+      error: (error as any).message,
+    });
+  }
 }
