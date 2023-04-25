@@ -1,9 +1,26 @@
 import { Request, Response } from "express";
 import { PostModel } from "./post-model";
 
+interface CastError extends Error {
+  name: "CastError";
+  kind: "ObjectId";
+}
+
+interface UpdateResult {
+  n: number;
+  nModified?: number;
+  ok: number;
+}
+
 export async function createPost(req: Request, res: Response) {
   try {
     const incomingPost = req.body;
+
+    const author = req.session?._id;
+    if (!author) {
+      res.status(400).json({ message: "Missing author ID" });
+      return;
+    }
 
     const newPost = new PostModel({
       ...incomingPost,
@@ -29,11 +46,6 @@ export async function createPost(req: Request, res: Response) {
       })
     );
   }
-}
-
-interface CastError extends Error {
-  name: "CastError";
-  kind: "ObjectId";
 }
 
 export async function getAllPosts(req: Request, res: Response) {
@@ -68,10 +80,7 @@ export async function getPostById(req: Request, res: Response) {
       console.log(post);
     }
   } catch (error: CastError | unknown) {
-    if (
-      (error as CastError).name === "CastError" &&
-      (error as CastError).kind === "ObjectId"
-    ) {
+    if ((error as CastError).name === "CastError" && (error as CastError).kind === "ObjectId") {
       res.status(404).json({ message: `${id} not found!` });
     } else {
       console.error("Error finding post", error);
@@ -83,16 +92,43 @@ export async function getPostById(req: Request, res: Response) {
   }
 }
 
+export async function updatePost(req: Request, res: Response) {
+  const id = req.params.id;
+
+  const { title, content } = req.body;
+
+  try {
+    const post = await PostModel.findById(id);
+
+    if (!post || undefined) {
+      res.status(404).json(`${id} not found`);
+      return;
+    }
+    post.title = title;
+    post.content = content;
+
+    const result = await post.save();
+
+    res.status(200).json(result);
+
+    //author verification
+  } catch (error) {
+    res.status(404).json({
+      message: "Error updating the post",
+      error: (error as any).message,
+    });
+  }
+}
+
 export async function deletePost(req: Request, res: Response) {
   try {
-    console.log("params id:", req.params.id);
     const post = await PostModel.findById(req.params.id);
 
     const loggedInUserId = req.session?._id;
 
     if (!post || undefined) {
-      const responseOjb = req.params.id + "Post not found";
-      res.status(404).json(responseOjb);
+      // const responseObj = req.params.id + "Post not found";
+      res.status(404).json("Post not found"); //responseObj
       return;
     }
     console.log(post?._id);
