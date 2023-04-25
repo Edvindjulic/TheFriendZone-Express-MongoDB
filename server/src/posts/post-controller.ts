@@ -25,7 +25,7 @@ export async function createPost(req: Request, res: Response) {
 
     try {
       await testSchema.validate(newPost);
-    } catch (error) {
+    } catch (error: any) {
       res.set("content-type", "application/json");
       return res.status(400).send(JSON.stringify(error.message));
     }
@@ -129,7 +129,7 @@ export async function updatePost(req: Request, res: Response) {
 
     try {
       await updatePostSchema.validate(updatedPost);
-    } catch (error) {
+    } catch (error: any) {
       res.set("content-type", "application/json");
       return res.status(400).json(error.message);
     }
