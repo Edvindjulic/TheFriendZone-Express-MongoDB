@@ -2,6 +2,17 @@ import { Request, Response } from "express";
 import * as yup from "yup";
 import { PostModel } from "./post-model";
 
+interface CastError extends Error {
+  name: "CastError";
+  kind: "ObjectId";
+}
+
+interface UpdateResult {
+  n: number;
+  nModified?: number;
+  ok: number;
+}
+
 const testSchema = yup.object().shape({
   title: yup.string().required(),
   content: yup.string().required(),
@@ -11,6 +22,12 @@ const testSchema = yup.object().shape({
 export async function createPost(req: Request, res: Response) {
   try {
     const incomingPost = req.body;
+
+    const author = req.session?._id;
+    if (!author) {
+      res.status(400).json({ message: "Missing author ID" });
+      return;
+    }
 
     const newPost = new PostModel({
       ...incomingPost,
@@ -43,11 +60,6 @@ export async function createPost(req: Request, res: Response) {
       })
     );
   }
-}
-
-interface CastError extends Error {
-  name: "CastError";
-  kind: "ObjectId";
 }
 
 export async function getAllPosts(req: Request, res: Response) {
@@ -96,6 +108,34 @@ export async function getPostById(req: Request, res: Response) {
   }
 }
 
+export async function updatePost(req: Request, res: Response) {
+  const id = req.params.id;
+
+  const { title, content } = req.body;
+
+  try {
+    const post = await PostModel.findById(id);
+
+    if (!post || undefined) {
+      res.status(404).json(`${id} not found`);
+      return;
+    }
+    post.title = title;
+    post.content = content;
+
+    const result = await post.save();
+
+    res.status(200).json(result);
+
+    //author verification
+  } catch (error) {
+    res.status(404).json({
+      message: "Error updating the post",
+      error: (error as any).message,
+    });
+  }
+}
+
 export async function deletePost(req: Request, res: Response) {
   try {
     const post = await PostModel.findById(req.params.id);
@@ -103,8 +143,8 @@ export async function deletePost(req: Request, res: Response) {
     const loggedInUserId = req.session?._id;
 
     if (!post || undefined) {
-      const responseOjb = req.params.id + "Post not found";
-      res.status(404).json(responseOjb);
+      // const responseObj = req.params.id + "Post not found";
+      res.status(404).json("Post not found"); //responseObj
       return;
     }
 

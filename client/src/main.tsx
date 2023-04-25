@@ -2,13 +2,14 @@ import { ThemeProvider } from "@emotion/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
   Navigate,
   Route,
   RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
 } from "react-router-dom";
 import App from "./App";
+import UserProvider from "./Context/UserContext";
 import LoggedIn from "./components/LoggedIn";
 import { theme } from "./components/theme";
 import "./index.css";
@@ -33,7 +34,9 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
+      <UserProvider>
       <RouterProvider router={router} />
+      </UserProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

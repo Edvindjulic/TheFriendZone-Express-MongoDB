@@ -12,6 +12,9 @@ import { useContext, useState } from "react";
 import { PostContext } from "../Context/PostContext";
 import Posts from "./PostComponent";
 import { theme } from "./theme";
+import { UserContext } from "../Context/UserContext";
+
+
 
 function LoggedIn() {
   const [postText, setPostText] = useState("");
@@ -22,13 +25,15 @@ function LoggedIn() {
     setPostText("");
   };
 
+  const { user } = useContext(UserContext);
+
   return (
     <ThemeProvider theme={theme}>
       <div>
         <AppBar position="static" sx={{ marginBottom: 4 }}>
           <Toolbar sx={{ justifyContent: "flex-end" }}>
             <Typography variant="h6" sx={{ order: 2 }}>
-              Ditt coola user name
+              {user?.username}
             </Typography>
           </Toolbar>
         </AppBar>
