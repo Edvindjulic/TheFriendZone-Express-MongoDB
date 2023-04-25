@@ -26,10 +26,27 @@ export default function SignUpForm() {
       confirmPassword: "",
     },
     validationSchema: SignupSchema,
-    onSubmit: (values: SignupValues) => {
-      console.log(values);
-      // VAD GÖR VI HÄR BACKEND TEAMET?
-    },
+    onSubmit: async (values: SignupValues) => {
+      try {
+        const response = await fetch("/api/users/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Registration successful, user:", data);
+        } else {
+          const message = await response.text();
+          throw new Error(message);
+        } 
+      }catch (error) {
+          console.error("Error registering user:", error);
+        }
+      },
   });
 
   return (
