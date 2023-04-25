@@ -17,6 +17,7 @@ import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
 import Startpage from "./pages/Startpage";
+import { PostProvider } from "./Context/PostContext";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -35,7 +36,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <UserProvider>
-      <RouterProvider router={router} />
+        <PostProvider>
+          <RouterProvider router={router} />
+      </PostProvider>
       </UserProvider>
     </ThemeProvider>
   </React.StrictMode>

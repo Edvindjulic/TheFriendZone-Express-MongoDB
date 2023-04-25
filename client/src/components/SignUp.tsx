@@ -27,6 +27,7 @@ export default function SignUpForm() {
     },
     validationSchema: SignupSchema,
     onSubmit: async (values: SignupValues) => {
+      console.log("vad fan som helst");
       try {
         const response = await fetch("/api/users/register", {
           method: "POST",
