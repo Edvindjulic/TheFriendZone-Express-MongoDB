@@ -2,6 +2,8 @@ import { Box, Button, Paper, TextField } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useFormik } from "formik";
 import styled from "@emotion/styled";
+import { useContext } from "react";
+import { UserContext } from "../Context/UserContext";
 
 interface SigninValues {
   username: string;
@@ -9,14 +11,33 @@ interface SigninValues {
 }
 
 export default function SignInForm() {
+  const { setUser } = useContext(UserContext);
   const formik = useFormik<SigninValues>({
     initialValues: {
       username: "",
       password: "",
     },
-    onSubmit: (values: SigninValues) => {
-      console.log(values);
-      // VAD GÖR VI HÄR BACKEND?
+    onSubmit: async (values: SigninValues) => {
+      try {
+        const response = await fetch("/api/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+          console.log("Login successful, user:", data); //endast för att visa vilken användare som sparas i contexten
+        } else {
+          const message = await response.text();
+          throw new Error(message);
+        }
+      } catch (error) {
+        console.error("Error logging in user:", error);
+      }
     },
   });
 
