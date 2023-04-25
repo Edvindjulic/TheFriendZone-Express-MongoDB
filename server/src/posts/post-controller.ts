@@ -25,7 +25,6 @@ export async function createPost(req: Request, res: Response) {
 
     try {
       await testSchema.validate(newPost);
-      console.log("Test-validation");
     } catch (error) {
       res.set("content-type", "application/json");
       return res.status(400).send(JSON.stringify(error.message));
@@ -91,9 +90,14 @@ export async function getPostById(req: Request, res: Response) {
   }
 }
 
+const updatePostSchema = yup.object().shape({
+  title: yup.string().required(),
+  content: yup.string().required(),
+  author: yup.string().required(),
+});
 export async function updatePost(req: Request, res: Response) {
   const id = req.params.id;
-  const { title, content } = req.body;
+  const { title, content, author } = req.body; // Add author to destructuring
 
   try {
     const post = await PostModel.findById(id);
@@ -110,14 +114,33 @@ export async function updatePost(req: Request, res: Response) {
       return;
     }
 
-    post.title = title;
-    post.content = content;
+    if (title === undefined || content === undefined || author === undefined) {
+      res.status(400).json("Missing title, content or author");
+      return;
+    }
+    const updatedPost = {
+      _id: post._id,
+      title: title || post.title,
+      content: content || post.content,
+      author: author || post.author,
+    };
+
+    try {
+      await updatePostSchema.validate(updatedPost);
+    } catch (error) {
+      res.set("content-type", "application/json");
+      // console.log(error.message, "error.message");
+      return res.status(400).json(error.message);
+    }
+
+    // Assign the updated values to the post object
+    post.title = updatedPost.title;
+    post.content = updatedPost.content;
+    post.author = updatedPost.author;
 
     const result = await post.save();
 
     res.status(200).json(result);
-
-    //author verification
   } catch (error) {
     res.status(404).json({
       message: "Error updating the post",
