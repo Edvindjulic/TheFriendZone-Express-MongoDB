@@ -2,17 +2,6 @@ import { Request, Response } from "express";
 import * as yup from "yup";
 import { PostModel } from "./post-model";
 
-interface CastError extends Error {
-  name: "CastError";
-  kind: "ObjectId";
-}
-
-interface UpdateResult {
-  n: number;
-  nModified?: number;
-  ok: number;
-}
-
 const testSchema = yup.object().shape({
   title: yup.string().required(),
   content: yup.string().required(),
@@ -25,7 +14,7 @@ export async function createPost(req: Request, res: Response) {
 
     const author = req.session?._id;
     if (!author) {
-      res.status(400).json({ message: "Missing author ID" });
+      res.status(400).json("Missing author ID");
       return;
     }
 
@@ -92,34 +81,35 @@ export async function getPostById(req: Request, res: Response) {
     } else {
       res.status(404).json(`${id} not found!`);
     }
-  } catch (error: CastError | unknown) {
-    if (
-      (error as CastError).name === "CastError" &&
-      (error as CastError).kind === "ObjectId"
-    ) {
+  } catch (error) {
+    if (error) {
       res.status(404).json({ message: `${id} not found!` });
     } else {
-      console.error("Error finding post", error);
-      res.status(500).json({
-        message: "Error finding post",
-        error: (error as any).message,
-      });
+      console.error("Error finding post");
+      res.status(500).json(error);
     }
   }
 }
 
 export async function updatePost(req: Request, res: Response) {
   const id = req.params.id;
-
   const { title, content } = req.body;
 
   try {
     const post = await PostModel.findById(id);
 
-    if (!post || undefined) {
+    if (!post) {
       res.status(404).json(`${id} not found`);
       return;
     }
+
+    const loggedInUserId = req.session?._id;
+
+    if (!post.author || post.author.toString() !== loggedInUserId) {
+      res.status(403).json("You are not authorized to edit this post");
+      return;
+    }
+
     post.title = title;
     post.content = content;
 
@@ -139,7 +129,6 @@ export async function updatePost(req: Request, res: Response) {
 export async function deletePost(req: Request, res: Response) {
   try {
     const post = await PostModel.findById(req.params.id);
-
     const loggedInUserId = req.session?._id;
 
     console.log(req.params.id, "req.params.id");
