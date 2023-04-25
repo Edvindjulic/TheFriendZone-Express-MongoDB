@@ -13,7 +13,7 @@ app.use(
     secure: false,
     httpOnly: true,
     secret: "as98d7asyudbahs8d97a6digas78d866u",
-    maxAge: 1000 * 3600,
+    maxAge: 1000 * 3600, // En timme
   })
 );
 

@@ -1,5 +1,15 @@
 import { Request, Response } from "express";
+import * as yup from "yup";
 import { PostModel } from "./post-model";
+
+
+
+
+const testSchema = yup.object().shape({
+  title: yup.string().required(),
+  content: yup.string().required(),
+  author: yup.string().required(),
+});
 
 export async function createPost(req: Request, res: Response) {
   try {
@@ -16,8 +26,15 @@ export async function createPost(req: Request, res: Response) {
       author: req.session?._id,
     });
 
-    const result = await newPost.save();
+    try {
+      await testSchema.validate(newPost);
+      console.log("Test-validation");
+    } catch (error) {
+      res.set("content-type", "application/json");
+      return res.status(400).send(JSON.stringify(error.message));
+    }
 
+    const result = await newPost.save();
     const responseObj = {
       message: "Post created",
       ...result.toJSON(),
@@ -66,10 +83,11 @@ export async function getPostById(req: Request, res: Response) {
       });
     } else {
       res.status(404).json(`${id} not found!`);
-      console.log(post);
     }
+
   } catch (error) {
     if (error) {
+
       res.status(404).json({ message: `${id} not found!` });
     } else {
       console.error("Error finding post");

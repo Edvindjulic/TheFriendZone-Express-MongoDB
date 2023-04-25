@@ -1,4 +1,6 @@
-import { createContext, useState } from "react";
+
+import { createContext, useEffect, useState } from "react";
+
 
 interface Post {
   title: string;
@@ -14,6 +16,16 @@ export const PostContext = createContext(
 
 export const PostProvider = ({ children }: { children: React.ReactNode }) => {
   const [posts, setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("/api/posts");
+      const data = await response.json();
+      setPosts(data);
+    };
+
+    fetchData();
+  }, []);
 
   const addPost = (post: Post) => {
     setPosts([post, ...posts]);

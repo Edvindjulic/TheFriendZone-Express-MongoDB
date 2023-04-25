@@ -1,25 +1,23 @@
 import argon2 from "argon2";
 import { Request, Response } from "express";
+import * as yup from "yup";
 import { UserModel } from "./user-model";
+
+const userSchema = yup.object().shape({
+  username: yup.string().strict().required(),
+  password: yup.string().strict().required(),
+});
+
 export async function registerUser(req: Request, res: Response) {
   try {
     const { username, password, isAdmin = false } = req.body;
-    const user = new UserModel({ username, password, isAdmin });
+    const user = { username, password, isAdmin };
 
-    // Check for missing or incorrect values
-    if (!username || typeof username !== "string") {
-      const message =
-        "Invalid request: Username is missing or has an incorrect format";
+    try {
+      await userSchema.validate(user);
+    } catch (error) {
       res.set("content-type", "application/json");
-      return res.status(400).send(JSON.stringify({ message }));
-    }
-
-    if (!password || typeof password !== "string") {
-      const message =
-        "Invalid request: Password is missing or has an incorrect format";
-      res.set("content-type", "application/json");
-
-      return res.status(400).send(JSON.stringify({ message }));
+      return res.status(400).send(JSON.stringify(error.message));
     }
 
     const users = await UserModel.find({ username: username });
@@ -28,10 +26,7 @@ export async function registerUser(req: Request, res: Response) {
       return res.status(409).send(JSON.stringify("Username already in use"));
     }
 
-    // const hashedPassword = await argon2.hash(password);
-    // user.password = hashedPassword;
-
-    const result = await user.save();
+    const result = await UserModel.create(user);
 
     const responseObj = {
       message: "User inserted",
