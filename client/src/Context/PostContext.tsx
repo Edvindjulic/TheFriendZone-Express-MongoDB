@@ -1,4 +1,6 @@
+
 import { createContext, useEffect, useState } from "react";
+
 
 interface Post {
   title: string;
