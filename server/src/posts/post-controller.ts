@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { UpdateWriteOpResult } from "mongodb";
 import { PostModel } from "./post-model";
 
 interface CastError extends Error {
@@ -16,6 +15,12 @@ interface UpdateResult {
 export async function createPost(req: Request, res: Response) {
   try {
     const incomingPost = req.body;
+
+    const author = req.session?._id;
+    if (!author) {
+      res.status(400).json({ message: "Missing author ID" });
+      return;
+    }
 
     const newPost = new PostModel({
       ...incomingPost,
@@ -88,37 +93,42 @@ export async function getPostById(req: Request, res: Response) {
 }
 
 export async function updatePost(req: Request, res: Response) {
-  const postId = req.params.id;
+  const id = req.params.id;
+
   const { title, content } = req.body;
-  if (!title || !content) {
-    return res.status(400).json("Title and content required");
-  }
 
   try {
-    const result = await PostModel.findByIdAndUpdate({ _id: postId }, { title, content });
-    if ((result as UpdateWriteOpResult).modifiedCount === 0) {
-      return res.status(404).json("Post not found");
+    const post = await PostModel.findById(id);
+
+    if (!post || undefined) {
+      res.status(404).json(`${id} not found`);
+      return;
     }
-    const updatedPost = await PostModel.findById(postId);
-    // console.log(postId.length);
-    res.status(200).json(updatedPost);
-    console.log(updatedPost);
-    console.log(req.body);
+    post.title = title;
+    post.content = content;
+
+    const result = await post.save();
+
+    res.status(200).json(result);
+
+    //author verification
   } catch (error) {
-    return res.status(500).json(error);
+    res.status(404).json({
+      message: "Error updating the post",
+      error: (error as any).message,
+    });
   }
 }
 
 export async function deletePost(req: Request, res: Response) {
   try {
-    console.log("params id:", req.params.id);
     const post = await PostModel.findById(req.params.id);
 
     const loggedInUserId = req.session?._id;
 
     if (!post || undefined) {
-      const responseOjb = req.params.id + "Post not found";
-      res.status(404).json(responseOjb);
+      // const responseObj = req.params.id + "Post not found";
+      res.status(404).json("Post not found"); //responseObj
       return;
     }
     console.log(post?._id);
