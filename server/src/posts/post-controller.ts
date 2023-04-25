@@ -109,9 +109,11 @@ export async function updatePost(req: Request, res: Response) {
 
     const loggedInUserId = req.session?._id;
 
-    if (!post.author || post.author.toString() !== loggedInUserId) {
-      res.status(403).json("You are not authorized to edit this post");
-      return;
+    if (!req.session?.isAdmin) {
+      if (!post.author || post.author.toString() !== loggedInUserId) {
+        res.status(403).json("You are not authorized to edit this post");
+        return;
+      }
     }
 
     if (title === undefined || content === undefined || author === undefined) {
@@ -129,7 +131,6 @@ export async function updatePost(req: Request, res: Response) {
       await updatePostSchema.validate(updatedPost);
     } catch (error) {
       res.set("content-type", "application/json");
-      // console.log(error.message, "error.message");
       return res.status(400).json(error.message);
     }
 
@@ -154,17 +155,19 @@ export async function deletePost(req: Request, res: Response) {
     const post = await PostModel.findById(req.params.id);
     const loggedInUserId = req.session?._id;
 
-    console.log(req.params.id, "req.params.id");
     if (!post || undefined) {
       const responseObj = req.params.id + "not found";
       res.status(404).json(responseObj); //responseObj
       return;
     }
 
-    if (loggedInUserId !== post?.author?.toString()) {
-      res.status(403).json("You are not authorized to delete this post");
-      return;
+    if (!req.session?.isAdmin) {
+      if (loggedInUserId !== post?.author?.toString()) {
+        res.status(403).json("You are not authorized to delete this post");
+        return;
+      }
     }
+
     await PostModel.findByIdAndDelete(req.params.id);
 
     res.status(204).json(post);
