@@ -15,10 +15,7 @@ export async function registerUser(req: Request, res: Response) {
 
     try {
       await userSchema.validate(user);
-      console.log("Validation passed");
     } catch (error) {
-      console.log("Validation failed:");
-      console.error(error);
       res.set("content-type", "application/json");
       return res.status(400).send(JSON.stringify(error.message));
     }

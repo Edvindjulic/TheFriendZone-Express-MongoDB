@@ -65,7 +65,6 @@ export async function getPostById(req: Request, res: Response) {
       });
     } else {
       res.status(404).json(`${id} not found!`);
-      console.log(post);
     }
   } catch (error: CastError | unknown) {
     if (
@@ -85,7 +84,6 @@ export async function getPostById(req: Request, res: Response) {
 
 export async function deletePost(req: Request, res: Response) {
   try {
-    console.log("params id:", req.params.id);
     const post = await PostModel.findById(req.params.id);
 
     const loggedInUserId = req.session?._id;
@@ -95,7 +93,6 @@ export async function deletePost(req: Request, res: Response) {
       res.status(404).json(responseOjb);
       return;
     }
-    console.log(post?._id);
 
     if (loggedInUserId !== post?.author?.toString()) {
       res.status(403).json("You are not authorized to delete this post");
