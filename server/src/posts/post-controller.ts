@@ -142,9 +142,10 @@ export async function deletePost(req: Request, res: Response) {
 
     const loggedInUserId = req.session?._id;
 
+    console.log(req.params.id, "req.params.id");
     if (!post || undefined) {
-      // const responseObj = req.params.id + "Post not found";
-      res.status(404).json("Post not found"); //responseObj
+      const responseObj = req.params.id + "not found";
+      res.status(404).json(responseObj); //responseObj
       return;
     }
 
