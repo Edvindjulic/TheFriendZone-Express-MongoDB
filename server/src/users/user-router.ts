@@ -19,5 +19,6 @@ const userRouter = express
   .put("/api/users/:id", adminAuth, updateUser)
   .delete("/api/users/:id", adminAuth, deleteUser);
 // .get("/users/auth", adminAuth, getSelf)
+// Hämta user från req.session
 
 export default userRouter;
