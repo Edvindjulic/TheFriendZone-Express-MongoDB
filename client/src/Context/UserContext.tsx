@@ -12,12 +12,14 @@ interface UserContextType {
   setUser: (user?: User) => void;
   logout: () => void;
   getAllUsers: () => Promise<User[]>;
+  removeUser: (id: string) => Promise<void>;
 }
 
 export const UserContext = createContext<UserContextType>({
   setUser: () => {},
   logout: () => {},
   getAllUsers: async () => [],
+  removeUser: async () => {},
 });
 
 interface Props {
@@ -72,8 +74,31 @@ export default function UserProvider({ children }: Props) {
     return data;
   }
 
+  async function removeUser(id: string) {
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.json();
+        throw new Error(errorMessage.message);
+      }
+
+      // Refresh user list or update the state here if needed
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      // Show an error message to the user if needed
+    }
+  }
+
   return (
-    <UserContext.Provider value={{ user, setUser, logout, getAllUsers }}>
+    <UserContext.Provider
+      value={{ user, setUser, logout, getAllUsers, removeUser }}
+    >
       {children}
     </UserContext.Provider>
   );
