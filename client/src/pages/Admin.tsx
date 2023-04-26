@@ -63,10 +63,9 @@ export default function Admin() {
                       {user.isAdmin.toString()}
                     </TableCell>
                     <TableCell align="right">
-                      <Button type="contained"> Byt status </Button>{" "}
+                      <Button> Byt status </Button>{" "}
                     </TableCell>
                     <TableCell align="right">
-                      {user._id}
                       <Button onClick={() => handleRemoveUser(user._id)}>
                         Ta bort{" "}
                       </Button>{" "}
