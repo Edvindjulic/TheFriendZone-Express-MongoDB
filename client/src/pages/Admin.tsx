@@ -9,7 +9,8 @@ import { UserContext } from "../Context/UserContext";
 import AccountMenu from "../components/AccountMenu";
 
 export default function Admin() {
-  const { user, getAllUsers, removeUser } = React.useContext(UserContext);
+  const { user, getAllUsers, removeUser, changeAdmin } =
+    React.useContext(UserContext);
   const [allUsers, setAllUsers] = React.useState([]);
 
   const handleGetAllUsers = async () => {
@@ -17,11 +18,16 @@ export default function Admin() {
     setAllUsers(data);
   };
 
-  const handleRemoveUser = async (userId) => {
+  const handleRemoveUser = async (userId: string) => {
     await removeUser(userId);
     handleGetAllUsers(); // Refresh the list of users after a user is removed
   };
 
+  const handleToggleAdmin = async (userId: string, isAdmin: boolean) => {
+    const newIsAdmin = !isAdmin;
+    await changeAdmin(userId, newIsAdmin);
+    handleGetAllUsers(); // Refresh the list of users after a user's isAdmin status is toggled
+  };
   React.useEffect(() => {
     handleGetAllUsers();
   }, []);
@@ -32,11 +38,6 @@ export default function Admin() {
         <>
           <AccountMenu />
           <Typography variant="h3">Admin</Typography>
-          {/* <ul>
-            {allUsers.map((user) => (
-              <li key={user._id}>{user.username}</li>
-            ))}
-          </ul> */}
 
           <TableContainer component={Paper} sx={{ maxWidth: 700 }}>
             <Table sx={{ width: "100%" }} aria-label="simple table">
@@ -63,7 +64,13 @@ export default function Admin() {
                       {user.isAdmin.toString()}
                     </TableCell>
                     <TableCell align="right">
-                      <Button> Byt status </Button>{" "}
+                      <Button
+                        onClick={() =>
+                          handleToggleAdmin(user._id, user.isAdmin)
+                        }
+                      >
+                        Byt status
+                      </Button>{" "}
                     </TableCell>
                     <TableCell align="right">
                       <Button onClick={() => handleRemoveUser(user._id)}>

@@ -13,6 +13,7 @@ interface UserContextType {
   logout: () => void;
   getAllUsers: () => Promise<User[]>;
   removeUser: (id: string) => Promise<void>;
+  changeAdmin: (id: string, isAdmin: boolean) => Promise<void>;
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -20,6 +21,7 @@ export const UserContext = createContext<UserContextType>({
   logout: () => {},
   getAllUsers: async () => [],
   removeUser: async () => {},
+  changeAdmin: async () => {},
 });
 
 interface Props {
@@ -87,17 +89,36 @@ export default function UserProvider({ children }: Props) {
         const errorMessage = await response.json();
         throw new Error(errorMessage.message);
       }
-
-      // Refresh user list or update the state here if needed
     } catch (error) {
       console.error("Error deleting user:", error);
-      // Show an error message to the user if needed
+    }
+  }
+
+  async function changeAdmin(id: string, isAdmin: boolean) {
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isAdmin }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error updating admin status:", error);
+      throw error;
     }
   }
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, logout, getAllUsers, removeUser }}
+      value={{ user, setUser, logout, getAllUsers, removeUser, changeAdmin }}
     >
       {children}
     </UserContext.Provider>
