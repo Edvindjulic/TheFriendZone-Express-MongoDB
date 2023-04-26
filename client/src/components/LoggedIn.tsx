@@ -37,7 +37,10 @@ export default function LoggedIn() {
 
   const { addPost } = useContext(PostContext);
 
+
+
   const { user, logout } = useContext(UserContext);
+
 
   return (
     <Box
@@ -45,12 +48,24 @@ export default function LoggedIn() {
         width: "100%",
         backgroundColor: "background.paper",
         padding: "2rem",
+        maxWidth: "673px", //Helt godtyckligt
+        marginLeft: "auto",
+        marginRight: "auto",
       }}
     >
       <Box>
         <AppBar position="static" sx={{ marginBottom: 4 }}>
+
+          <Toolbar sx={{ justifyContent: "flex-end" }}>
+            <Typography variant="h6" sx={{ order: 2 }}>
+              {user?.username}
+              {user?.isAdmin && <span> 👑 </span>}
+            </Typography>
+          </Toolbar>
+
           <AccountMenu />
-          <Toolbar sx={{ justifyContent: "flex-end" }}></Toolbar>
+         
+
         </AppBar>
         <Box
           sx={{ padding: "1.2rem" }}
@@ -62,22 +77,23 @@ export default function LoggedIn() {
             <Grid item xs={12} sm={9}>
               <TextField
                 fullWidth
-                label="Skriv ditt inlägg..."
-                variant="outlined"
-                type="text"
-                name="content"
-                value={formik.values.content}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              <TextField
-                fullWidth
                 label="Titel"
                 variant="outlined"
                 type="text"
                 size="medium"
                 name="title"
                 value={formik.values.title}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              <Box sx={{ height: "1rem" }} />
+              <TextField
+                fullWidth
+                label="Skriv ditt inlägg..."
+                variant="outlined"
+                type="text"
+                name="content"
+                value={formik.values.content}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />

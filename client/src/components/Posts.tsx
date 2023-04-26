@@ -9,7 +9,7 @@ export default function Posts() {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-      {posts.map((post, index) => (
+      {[...posts].reverse().map((post, index) => (
         <Paper
           key={index}
           elevation={2}

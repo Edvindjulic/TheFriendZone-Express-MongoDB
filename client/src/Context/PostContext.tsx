@@ -47,7 +47,10 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error("Error registering user:", error);
     }
-    setPosts([newPost, ...posts]);
+
+    setPosts([...posts, newPost]);
+
+   
   }
 
   async function deletePost(id: string, index: Number) {
@@ -68,6 +71,7 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error("error deleting post", error);
     }
+
   }
 
   return (
