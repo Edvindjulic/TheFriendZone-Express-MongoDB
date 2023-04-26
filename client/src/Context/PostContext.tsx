@@ -4,6 +4,7 @@ interface Post {
   id: string;
   title: string;
   content: string;
+  author: string;
 }
 
 export const PostContext = createContext(
@@ -71,6 +72,8 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <PostContext.Provider value={{ posts, addPost, deletePost }}>{children}</PostContext.Provider>
+    <PostContext.Provider value={{ posts, addPost, deletePost }}>
+      {children}
+    </PostContext.Provider>
   );
 };
