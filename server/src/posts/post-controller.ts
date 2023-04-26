@@ -95,6 +95,7 @@ const updatePostSchema = yup.object().shape({
   content: yup.string().required(),
   author: yup.string().required(),
 });
+
 export async function updatePost(req: Request, res: Response) {
   const id = req.params.id;
   const { title, content, author } = req.body; // Add author to destructuring
@@ -134,7 +135,6 @@ export async function updatePost(req: Request, res: Response) {
       return res.status(400).json(error.message);
     }
 
-    // Assign the updated values to the post object
     post.title = updatedPost.title;
     post.content = updatedPost.content;
     post.author = updatedPost.author;
@@ -157,7 +157,7 @@ export async function deletePost(req: Request, res: Response) {
 
     if (!post || undefined) {
       const responseObj = req.params.id + "not found";
-      res.status(404).json(responseObj); //responseObj
+      res.status(404).json(responseObj);
       return;
     }
 
