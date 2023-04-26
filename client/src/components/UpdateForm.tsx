@@ -29,6 +29,7 @@ export default function UpdateForm(id: string) {
         author: postValues?.author,
         _id: postValues?._id,
       };
+      // console.log(sendValues);
       updatePost(sendValues);
     },
   });
