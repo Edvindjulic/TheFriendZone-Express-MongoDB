@@ -1,17 +1,10 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Box, Button, Grid, TextField, Toolbar } from "@mui/material";
 import { useFormik } from "formik";
 import { useContext } from "react";
 import * as Yup from "yup";
 import { PostContext } from "../Context/PostContext";
 import { UserContext } from "../Context/UserContext";
+import AccountMenu from "./AccountMenu";
 import Posts from "./Posts";
 
 interface PostValues {
@@ -22,24 +15,12 @@ interface PostValues {
 const PostSchema = Yup.object().shape({
   title: Yup.string()
     .required("Titel är obligatoriskt")
-    .min(
-      3,
-      "Titeln måste innehålla minst 3 tecken"
-    )
-    .max(
-      20,
-      "Titeln får inte vara längre än 20 tecken"
-    ),
+    .min(3, "Titeln måste innehålla minst 3 tecken")
+    .max(20, "Titeln får inte vara längre än 20 tecken"),
   content: Yup.string()
     .required("Innehåll är obligatoriskt")
-    .min(
-      3,
-      "Innehållet måste innehålla minst 3 tecken"
-    )
-    .max(
-      140,
-      "Innehållet får inte vara längre än 140 tecken"
-    ),
+    .min(3, "Innehållet måste innehålla minst 3 tecken")
+    .max(140, "Innehållet får inte vara längre än 140 tecken"),
 });
 
 export default function LoggedIn() {
@@ -56,8 +37,7 @@ export default function LoggedIn() {
 
   const { addPost } = useContext(PostContext);
 
-
-  const { user } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
 
   return (
     <Box
@@ -68,21 +48,9 @@ export default function LoggedIn() {
       }}
     >
       <Box>
-        <AppBar
-          position="static"
-          sx={{ marginBottom: 4 }}
-        >
-          <Toolbar
-            sx={{ justifyContent: "flex-end" }}
-          >
-            <Typography
-              variant="h6"
-              sx={{ order: 2 }}
-            >
-              {user?.username}
-              {user?.isAdmin && <span> 👑 </span>}
-            </Typography>
-          </Toolbar>
+        <AppBar position="static" sx={{ marginBottom: 4 }}>
+          <AccountMenu />
+          <Toolbar sx={{ justifyContent: "flex-end" }}></Toolbar>
         </AppBar>
         <Box
           sx={{ padding: "1.2rem" }}
