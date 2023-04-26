@@ -7,12 +7,12 @@ import { UserContext } from "../Context/UserContext";
 import AccountMenu from "./AccountMenu";
 import Posts from "./Posts";
 
-interface PostValues {
+export interface PostValues {
   title: string;
   content: string;
 }
 
-const PostSchema = Yup.object().shape({
+export const PostSchema = Yup.object().shape({
   title: Yup.string()
     .required("Titel är obligatoriskt")
     .min(3, "Titeln måste innehålla minst 3 tecken")

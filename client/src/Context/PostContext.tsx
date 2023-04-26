@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 
 interface Post {
-  id: string;
+  _id: string;
   title: string;
   content: string;
   author: string;
