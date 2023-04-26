@@ -1,4 +1,12 @@
-import { AppBar, Box, Button, Grid, TextField, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  Grid,
+  TextField,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { useFormik } from "formik";
 import { useContext } from "react";
 import * as Yup from "yup";
@@ -37,10 +45,7 @@ export default function LoggedIn() {
 
   const { addPost } = useContext(PostContext);
 
-
-
   const { user, logout } = useContext(UserContext);
-
 
   return (
     <Box
@@ -55,7 +60,6 @@ export default function LoggedIn() {
     >
       <Box>
         <AppBar position="static" sx={{ marginBottom: 4 }}>
-
           <Toolbar sx={{ justifyContent: "flex-end" }}>
             <Typography variant="h6" sx={{ order: 2 }}>
               {user?.username}
@@ -64,8 +68,6 @@ export default function LoggedIn() {
           </Toolbar>
 
           <AccountMenu />
-         
-
         </AppBar>
         <Box
           sx={{ padding: "1.2rem" }}
