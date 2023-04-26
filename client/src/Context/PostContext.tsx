@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 
 interface Post {
-  id: string;
+  _id: string;
   title: string;
   content: string;
   ownerId: string;
@@ -10,6 +10,7 @@ interface Post {
 export const PostContext = createContext(
   {} as {
     posts: Post[];
+    filteredPosts: Post[];
     addPost: (post: Post) => void;
     deletePost: (id: string, index: number) => void;
   }
@@ -17,12 +18,14 @@ export const PostContext = createContext(
 
 export const PostProvider = ({ children }: { children: React.ReactNode }) => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("/api/posts");
       const data = await response.json();
       setPosts(data);
+      setFilteredPosts(data); // Initialize filtered posts with initial data
     };
 
     fetchData();
@@ -52,23 +55,37 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     setPosts([...posts, newPost]);
   }
 
-  async function deletePost(id: string, index: number) {
-    const userResponse = await fetch("/api/user");
+  async function deletePost(_id: string, index: number) {
+    console.log("Deleting post with ID:", _id);
+    const userResponse = await fetch("/api/users");
     const user = await userResponse.json();
+
     try {
-      const postOwnerId = posts[index].ownerId;
-      if (user.id !== postOwnerId && !user.isAdmin) {
-        console.log("user is not authorized to delete this post");
+      if (index >= 0 && index < posts.length) {
+        // Check if index is valid
+        const postOwnerId = posts[index]?.ownerId?.toString();
+        console.log(postOwnerId);
+        if (user.id !== postOwnerId && !user.isAdmin) {
+          console.log("user is not authorized to delete this post");
+          return;
+        }
+      } else {
+        console.log("Invalid index");
         return;
       }
-      const response = await fetch(`/api/posts/${id}`, {
+
+      const response = await fetch(`/api/posts/${_id}`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       if (response.ok) {
-        console.log("post deleted succesfully");
+        console.log("post deleted successfully");
         const updatedPosts = posts.filter((post, i) => i !== index);
         setPosts(updatedPosts);
+        setFilteredPosts(updatedPosts); // Set the filtered array
       } else {
         console.log("error deleting");
         const message = await response.text();
@@ -80,6 +97,8 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <PostContext.Provider value={{ posts, addPost, deletePost }}>{children}</PostContext.Provider>
+    <PostContext.Provider value={{ posts, filteredPosts, addPost, deletePost }}>
+      {children}
+    </PostContext.Provider>
   );
 };

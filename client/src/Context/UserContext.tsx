@@ -36,7 +36,7 @@ export default function UserProvider({ children }: Props) {
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
-        console.log(userData);
+        // console.log(userData);
       } else {
         console.error("Error fetching user data:", response.statusText);
       }

@@ -1,13 +1,15 @@
-import { Button } from "@mui/material";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import { Box, Button, Paper } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { PostContext } from "../Context/PostContext";
 import { User } from "../Context/UserContext";
 
 export default function Posts() {
   const { posts, deletePost } = useContext(PostContext);
-  const [currentUser, setCurrentUser] = useState<User>({ _id: "", username: "", isAdmin: false });
+  const [currentUser, setCurrentUser] = useState<User>({
+    _id: "",
+    username: "",
+    isAdmin: false,
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,9 +38,12 @@ export default function Posts() {
         >
           <h4 style={{ marginBottom: "1rem" }}>{post.title}</h4>
           <p>{post.content}</p>
-          <Button onClick={() => deletePost(post.id, index)}>Remove Post</Button>
+          {currentUser._id === post.ownerId || currentUser.isAdmin ? (
+            <Button onClick={() => deletePost(post._id, index)}>Remove Post</Button>
+          ) : null}
         </Paper>
       ))}
+      <p>Number of posts: {posts.length}</p>
     </Box>
   );
 }
