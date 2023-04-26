@@ -4,6 +4,7 @@ import { adminAuth } from "../middlewares";
 import {
   deleteUser,
   getAllUsers,
+  getSelf,
   loginUser,
   logoutUser,
   registerUser,
@@ -17,8 +18,9 @@ const userRouter = express
   .post("/api/users/login", loginUser)
   .post("/api/users/logout", logoutUser)
   .put("/api/users/:id", adminAuth, updateUser)
-  .delete("/api/users/:id", adminAuth, deleteUser);
-// .get("/users/auth", adminAuth, getSelf)
+  .delete("/api/users/:id", adminAuth, deleteUser)
+  .get("/api/users/me", getSelf);
+// .get("/users/me", adminAuth, getSelf)
 // Hämta user från req.session
 
 export default userRouter;

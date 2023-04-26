@@ -144,3 +144,22 @@ export async function deleteUser(req: Request, res: Response) {
     });
   }
 }
+
+export async function getSelf(req: Request, res: Response) {
+  try {
+    const user = req.session;
+
+    if (JSON.stringify(user) === "{}") {
+      res.status(401).json({
+        message: "You are not logged in",
+      });
+    } else {
+      res.status(200).json(user);
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occurred",
+      error: (error as any).message,
+    });
+  }
+}
