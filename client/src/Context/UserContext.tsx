@@ -1,7 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 
 interface User {
-  _id: string;
+  _id?: string;
+  id?: string;
   username: string;
   isAdmin: boolean;
 }
