@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 
-interface User {
+export interface User {
   _id: string;
   username: string;
   isAdmin: boolean;
@@ -63,9 +63,5 @@ export default function UserProvider({ children }: Props) {
     }
   }
 
-  return (
-    <UserContext.Provider value={{ user, setUser, logout }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ user, setUser, logout }}>{children}</UserContext.Provider>;
 }

@@ -1,11 +1,23 @@
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { PostContext } from "../Context/PostContext";
+import { User } from "../Context/UserContext";
 
 export default function Posts() {
   const { posts, deletePost } = useContext(PostContext);
+  const [currentUser, setCurrentUser] = useState<User>({ _id: "", username: "", isAdmin: false });
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const response = await fetch("/api/users/me");
+      const data = await response.json();
+      setCurrentUser(data);
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>

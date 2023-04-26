@@ -4,6 +4,7 @@ interface Post {
   id: string;
   title: string;
   content: string;
+  ownerId: string;
 }
 
 export const PostContext = createContext(
@@ -49,12 +50,17 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     setPosts([...posts, newPost]);
-
-   
   }
 
-  async function deletePost(id: string, index: Number) {
+  async function deletePost(id: string, index: number) {
+    const userResponse = await fetch("/api/user");
+    const user = await userResponse.json();
     try {
+      const postOwnerId = posts[index].ownerId;
+      if (user.id !== postOwnerId && !user.isAdmin) {
+        console.log("user is not authorized to delete this post");
+        return;
+      }
       const response = await fetch(`/api/posts/${id}`, {
         method: "DELETE",
       });
@@ -71,7 +77,6 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error("error deleting post", error);
     }
-
   }
 
   return (
