@@ -22,24 +22,12 @@ interface PostValues {
 const PostSchema = Yup.object().shape({
   title: Yup.string()
     .required("Titel är obligatoriskt")
-    .min(
-      3,
-      "Titeln måste innehålla minst 3 tecken"
-    )
-    .max(
-      20,
-      "Titeln får inte vara längre än 20 tecken"
-    ),
+    .min(3, "Titeln måste innehålla minst 3 tecken")
+    .max(20, "Titeln får inte vara längre än 20 tecken"),
   content: Yup.string()
     .required("Innehåll är obligatoriskt")
-    .min(
-      3,
-      "Innehållet måste innehålla minst 3 tecken"
-    )
-    .max(
-      140,
-      "Innehållet får inte vara längre än 140 tecken"
-    ),
+    .min(3, "Innehållet måste innehålla minst 3 tecken")
+    .max(140, "Innehållet får inte vara längre än 140 tecken"),
 });
 
 export default function LoggedIn() {
@@ -55,8 +43,6 @@ export default function LoggedIn() {
   });
 
   const { addPost } = useContext(PostContext);
-
-
   const { user } = useContext(UserContext);
 
   return (
@@ -65,20 +51,15 @@ export default function LoggedIn() {
         width: "100%",
         backgroundColor: "background.paper",
         padding: "2rem",
+        maxWidth: "673px", //Helt godtyckligt
+        marginLeft: "auto",
+        marginRight: "auto",
       }}
     >
       <Box>
-        <AppBar
-          position="static"
-          sx={{ marginBottom: 4 }}
-        >
-          <Toolbar
-            sx={{ justifyContent: "flex-end" }}
-          >
-            <Typography
-              variant="h6"
-              sx={{ order: 2 }}
-            >
+        <AppBar position="static" sx={{ marginBottom: 4 }}>
+          <Toolbar sx={{ justifyContent: "flex-end" }}>
+            <Typography variant="h6" sx={{ order: 2 }}>
               {user?.username}
               {user?.isAdmin && <span> 👑 </span>}
             </Typography>
@@ -94,22 +75,23 @@ export default function LoggedIn() {
             <Grid item xs={12} sm={9}>
               <TextField
                 fullWidth
-                label="Skriv ditt inlägg..."
-                variant="outlined"
-                type="text"
-                name="content"
-                value={formik.values.content}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              <TextField
-                fullWidth
                 label="Titel"
                 variant="outlined"
                 type="text"
                 size="medium"
                 name="title"
                 value={formik.values.title}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              <Box sx={{ height: "1rem" }} />
+              <TextField
+                fullWidth
+                label="Skriv ditt inlägg..."
+                variant="outlined"
+                type="text"
+                name="content"
+                value={formik.values.content}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
