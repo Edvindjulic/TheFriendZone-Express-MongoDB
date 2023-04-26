@@ -22,24 +22,12 @@ interface PostValues {
 const PostSchema = Yup.object().shape({
   title: Yup.string()
     .required("Titel är obligatoriskt")
-    .min(
-      3,
-      "Titeln måste innehålla minst 3 tecken"
-    )
-    .max(
-      20,
-      "Titeln får inte vara längre än 20 tecken"
-    ),
+    .min(3, "Titeln måste innehålla minst 3 tecken")
+    .max(20, "Titeln får inte vara längre än 20 tecken"),
   content: Yup.string()
     .required("Innehåll är obligatoriskt")
-    .min(
-      3,
-      "Innehållet måste innehålla minst 3 tecken"
-    )
-    .max(
-      140,
-      "Innehållet får inte vara längre än 140 tecken"
-    ),
+    .min(3, "Innehållet måste innehålla minst 3 tecken")
+    .max(140, "Innehållet får inte vara längre än 140 tecken"),
 });
 
 export default function LoggedIn() {
@@ -56,8 +44,7 @@ export default function LoggedIn() {
 
   const { addPost } = useContext(PostContext);
 
-
-  const { user } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
 
   return (
     <Box
@@ -68,20 +55,13 @@ export default function LoggedIn() {
       }}
     >
       <Box>
-        <AppBar
-          position="static"
-          sx={{ marginBottom: 4 }}
-        >
-          <Toolbar
-            sx={{ justifyContent: "flex-end" }}
-          >
-            <Typography
-              variant="h6"
-              sx={{ order: 2 }}
-            >
+        <AppBar position="static" sx={{ marginBottom: 4 }}>
+          <Toolbar sx={{ justifyContent: "flex-end" }}>
+            <Typography variant="h6" sx={{ order: 2 }}>
               {user?.username}
               {user?.isAdmin && <span> 👑 </span>}
             </Typography>
+            <button onClick={logout}>Logga ut</button>
           </Toolbar>
         </AppBar>
         <Box
