@@ -11,11 +11,13 @@ interface UserContextType {
   user?: User;
   setUser: (user?: User) => void;
   logout: () => void;
+  getAllUsers: () => Promise<User[]>;
 }
 
 export const UserContext = createContext<UserContextType>({
   setUser: () => {},
   logout: () => {},
+  getAllUsers: async () => [],
 });
 
 interface Props {
@@ -64,8 +66,14 @@ export default function UserProvider({ children }: Props) {
     }
   }
 
+  async function getAllUsers() {
+    const response = await fetch("/api/users");
+    const data = await response.json();
+    return data;
+  }
+
   return (
-    <UserContext.Provider value={{ user, setUser, logout }}>
+    <UserContext.Provider value={{ user, setUser, logout, getAllUsers }}>
       {children}
     </UserContext.Provider>
   );
