@@ -1,6 +1,4 @@
-
 import { createContext, useEffect, useState } from "react";
-
 
 interface Post {
   title: string;
@@ -27,29 +25,28 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     fetchData();
   }, []);
 
- async function addPost(newPost: Post) {
-  try {
-    const response = await fetch("/api/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newPost),
-    });
+  async function addPost(newPost: Post) {
+    try {
+      const response = await fetch("/api/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newPost),
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log("Registration successful, user:", data);
-    } else {
-      const message = await response.text();
-      throw new Error(message);
-    } 
-  }catch (error) {
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Registration successful, user:", data);
+      } else {
+        const message = await response.text();
+        throw new Error(message);
+      }
+    } catch (error) {
       console.error("Error registering user:", error);
     }
-    setPosts([newPost, ...posts]);
-
-  };
+    setPosts([...posts, newPost]);
+  }
 
   return (
     <PostContext.Provider value={{ posts, addPost }}>
