@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 
-interface Post {
+export interface Post {
   _id: string;
   title: string;
   content: string;
@@ -12,6 +12,7 @@ export const PostContext = createContext(
     posts: Post[];
     addPost: (post: Post) => void;
     deletePost: (id: string, index: number) => void;
+    updatePost: (post: Post) => void;
   }
 );
 
@@ -70,9 +71,43 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("error deleting post", error);
     }
   }
+  type UpdatedPost = {
+    _id: string;
+    title: string;
+    content: string;
+    author: string;
+  };
+  async function updatePost(updatedPost: UpdatedPost) {
+    console.log(updatedPost);
+    try {
+      const response = await fetch(`/api/posts/${updatedPost._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedPost),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Update successful, post:", data);
+
+        // Update the state with the updated post
+        setPosts(
+          posts.map((post) =>
+            post._id === updatedPost._id ? updatedPost : post
+          )
+        );
+      } else {
+        const message = await response.text();
+        throw new Error(message);
+      }
+    } catch (error) {
+      console.error("Error updating post:", error);
+    }
+  }
 
   return (
-    <PostContext.Provider value={{ posts, addPost, deletePost }}>
+    <PostContext.Provider value={{ posts, addPost, deletePost, updatePost }}>
       {children}
     </PostContext.Provider>
   );

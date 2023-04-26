@@ -6,6 +6,7 @@ import { PostSchema, PostValues } from "./LoggedIn";
 
 export default function UpdateForm(id: string) {
   const { posts } = useContext(PostContext);
+  const { updatePost } = useContext(PostContext);
   const displayID = id;
   const postValues = posts.find((post) => post._id === displayID.id);
 
@@ -23,8 +24,12 @@ export default function UpdateForm(id: string) {
     initialValues,
     validationSchema: PostSchema,
     onSubmit(values: PostValues) {
-      console.log(values);
-      // updatePost(values);
+      const sendValues = {
+        ...values,
+        author: postValues?.author,
+        _id: postValues?._id,
+      };
+      updatePost(sendValues);
     },
   });
 
