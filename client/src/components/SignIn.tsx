@@ -1,8 +1,8 @@
-import { Box, Button, Paper, TextField } from "@mui/material";
-import { NavLink } from "react-router-dom";
-import { useFormik } from "formik";
 import styled from "@emotion/styled";
+import { Box, Button, Paper, TextField, useMediaQuery } from "@mui/material";
+import { useFormik } from "formik";
 import { useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { UserContext } from "../Context/UserContext";
 
 interface SigninValues {
@@ -26,7 +26,7 @@ export default function SignInForm() {
           },
           body: JSON.stringify(values),
         });
-        
+
         if (response.ok) {
           const data = await response.json();
           setUser(data);
@@ -43,9 +43,10 @@ export default function SignInForm() {
 
   const StyledNavLink = styled(NavLink)({
     textDecoration: "none",
-    color: "black"
+    color: "black",
   });
 
+  const matches = useMediaQuery("(max-width:300px)");
   return (
     <Paper
       elevation={6}
@@ -63,7 +64,7 @@ export default function SignInForm() {
         sx={{
           "& > :not(style)": {
             m: 1,
-            width: "20rem",
+
             display: "flex",
             flexDirection: "column",
             gap: "0.5rem",
@@ -82,14 +83,10 @@ export default function SignInForm() {
           value={formik.values.username}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.username && Boolean(formik.errors.username)
-          }
-          helperText={
-            formik.touched.username && formik.errors.username
-          }
+          error={formik.touched.username && Boolean(formik.errors.username)}
+          helperText={formik.touched.username && formik.errors.username}
           sx={{
-            backgroundColor: "white"
+            backgroundColor: "white",
           }}
         />
         <TextField
@@ -100,20 +97,18 @@ export default function SignInForm() {
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.password && Boolean(formik.errors.password)
-          }
-          helperText={
-            formik.touched.password && formik.errors.password
-          }
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
           sx={{
-            backgroundColor: "white"
+            backgroundColor: "white",
           }}
         />
         <Button color="secondary" type="submit" variant="contained">
           Logga in
         </Button>
-        <StyledNavLink to="/signup">Har du inget konto? Skapa ett här!</StyledNavLink>
+        <StyledNavLink to="/signup">
+          Har du inget konto? Skapa ett här!
+        </StyledNavLink>
       </Box>
     </Paper>
   );

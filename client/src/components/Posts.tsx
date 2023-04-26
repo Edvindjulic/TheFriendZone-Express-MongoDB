@@ -22,7 +22,7 @@ export default function Posts() {
             height: "10vh",
           }}
         >
-          <h4>{post.title}</h4>
+          <h4 style={{ marginBottom: "1rem" }}>{post.title}</h4>
           <p>{post.content}</p>
           <Button onClick={() => deletePost(post.id, index)}>Remove Post</Button>
         </Paper>
