@@ -1,20 +1,42 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/G8PqYEM6)
-# User Based Content
+# The Friend Zone
 
 ## Beskrivning
 
-Ni ska skapa en användarbaserad plattform där en användare har möjligheten att registrera sig, logga in och skapa innehåll. Vad för innehåll som användaren kan skapa är valfritt med det ska vara baserat på en resurs i erat Express-API. Användardatan ska även den baseras på en egen resurs (users), där lösenordet är krypterat. Samtligt innehåll som skapas, förändras eller tas bort ska sparas till en MongoDB databas. Innehållet som en användare skapar får endast lov att ändras eller tas bort av skaparen. Plattformen ska innehålla en klientapplikation där samtliga operationer som nämnts ovan är genomförbara. Dessutom ska innehållet på något sätt presenteras i gränssnittet och vara synligt föra alla - även om man inte är inloggad.
+The Friend Zone är en sida som på många sätt liknar twitter. För en vanlig användare kan man registrera ett konto, göra inlägg på en global tidslinje, ta bort samt redigera sina egna inlägg.
+
+De användare som har administratörsstatus kan göra ovanstående på allas inlägg, men har också möjligheten att ändra administratörsstatus på användare samt ta bort användare. Detta görs via en adminpanel som endast administratörer har tillgång till.
+
+## Tekniker och verktyg
+
+Vi har använt oss av följande tekniker:
+
+### Front End
+
+- [Yup](https://github.com/jquense/yup) - Validering
+- [Material UI](https://mui.com/material-ui/getting-started/overview/) Designsystem
+- [Formik](https://formik.org/docs) - Formulärhantering
+- [React](https://react.dev) - JavaScript-ramverk
+- [React Router](https://reactrouter.com/en/main) - Routing
+- [Vite](https://vitejs.dev/) - Byggverktyg
+
+### Back End
+
+- [Express](https://expressjs.com/) - Webbramverk
+- [Mongoose](https://mongoosejs.com/) - MongoDB-objektmodellhanterare
+- [MongoDB](https://www.mongodb.com/) - Dokumentdatabas
+- [Yup](http://github.com/jquense/yup) - Validering
+- [Cookie-Session](https://www.npmjs.com/package/cookie-session) - Sessionshantering
+- [Argon2](https://www.npmjs.com/package/argon2) - Kryptering
+- [Nodemon](https://www.npmjs.com/package/nodemon) - Utvecklingsverktyg
+
+## Skapare
+
+[Edvin Djulic](https://github.com/Edvindjulic), [Carl Hasselblad](https://github.com/lysmac), [Jesper Lindström](https://github.com/Jesper-Lindstrom), [Yehad Moussaoui](https://github.com/ye-mou)
 
 ## Kodbas
 
 Den här kodbasen är indelad i en [klientmapp](./client/) och en [servermapp](./server/).
 Servern har två miljöer konfigurerade, en för utveckling och en för testning.
-
-Servern innehåller några start-filer som kan vara bra att känna till:
-
-- `server.ts` - startfil för utvecklingsmiljön.
-- `app.ts` - innehåller all serverlogik.
-- `index.ts` - exports till testmiljön.
 
 Här är en lista på de olika skripten som kan köras i terminalen.
 
@@ -25,28 +47,30 @@ Navigera först till server mappen -`cd server` och sedan:
 - `npm run dev` - Startar utvecklingsmiljön.
 - `npm test` - Startar testmiljön så du kan jobba med kravlistan.
 
-För att bli godkänd på den här uppgiften MÅSTE ni använda GIT och GitHub. Inlämningen sker som vanligt via läroplattformen där ni lämnar in er projektmapp som en zip-fil. I projektmappen ska det finnas (utöver all kod) en README.md fil som innehåller en titel, beskrivning av uppgiften och vad som krävs för att bygga och starta projektet.
+Efter detta kan du navigera tillbaka till root-mappen genom att skriva `cd ..` och sedan köra följande kommandon:
 
-En muntligt presentation ska genomföras per grupp där ni visar vad ni har skapat. Samtlig funktionalitet ska demas och kommer att bockas av och Godkännas under presentationen. Upplägg och innehåll i övrigt är valfritt så länge ni håller er till ämnet. Ca 10-15 min per grupp.
+- `npm install` - Installerar alla NodeJS moduler (körs en gång).
+- `npm run dev` - Startar utvecklingsmiljön med Vite.
 
-Para ihop er i grupp om tre - ni väljer själva vilka ni jobbar med.
+När du har gjort detta kan du sedan när du står i root-mappen använda följande kommandon så du slipper navigera in i mapparna:
+
+- `npm test` - Startar testen utan att du behöver navigera in i server-mappen.
+- `npm run frontend` - Startar frontend-miljön med Vite.
+- `npm run backend` - Startar backend-miljön med Nodemon.
+- `npm run all`- Startar både frontend och backend samtidigt.
 
 **Krav för godkänt:**
 
-- [ ] Git & GitHub har använts
-- [ ] Projektmappen innehåller en README.md fil (läs ovan för mer info)
-- [ ] Uppgiften lämnas in i tid!
-- [ ] Det ska finnas minst två stycken resurser (users & posts)
-- [ ] Det ska gå att registrera sig, logga in och skapa innehåll som är kopplat till inloggad användare.
-- [ ] Endast den inloggade användaren får lov att utföra C_UD actions på sitt innehåll.
-- [ ] Allt innehåll ska sparas i en MongoDB databas.
-
-_Gjorda krav ska kryssar i_
+- [x] Git & GitHub har använts
+- [x] Projektmappen innehåller en README.md fil (läs ovan för mer info)
+- [x] Uppgiften lämnas in i tid!
+- [x] Det ska finnas minst två stycken resurser (users & posts)
+- [x] Det ska gå att registrera sig, logga in och skapa innehåll som är kopplat till inloggad användare.
+- [x] Endast den inloggade användaren får lov att utföra C_UD actions på sitt innehåll.
+- [x] Allt innehåll ska sparas i en MongoDB databas.
 
 **Krav för väl godkänt:**
 
-- [ ] Alla punkter för godkänt är uppfyllda
-- [ ] Det ska finnas en adminroll i systemet där man som inloggad admin har rättigheten att utföra CRUD operationer på allt innehåll.
-- [ ] Admins ska ha tillgång till ett gränssnitt som listar alla användare och deras roller. En admin ska från gränssnittet kunna ta bort användare eller ändra dess roll.
-
-_Gjorda krav ska kryssar i_
+- [x] Alla punkter för godkänt är uppfyllda
+- [x] Det ska finnas en adminroll i systemet där man som inloggad admin har rättigheten att utföra CRUD operationer på allt innehåll.
+- [x] Admins ska ha tillgång till ett gränssnitt som listar alla användare och deras roller. En admin ska från gränssnittet kunna ta bort användare eller ändra dess roll.
