@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { PostContext } from "../Context/PostContext";
 
 export default function Posts() {
