@@ -6,11 +6,13 @@ import {
   Portal,
   Snackbar,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import { theme } from "./theme";
 
 interface SignupValues {
   username: string;
@@ -19,30 +21,17 @@ interface SignupValues {
 }
 
 const SignupSchema = Yup.object().shape({
-  username: Yup.string().required(
-    "Användarnamn är obligatoriskt"
-  ),
+  username: Yup.string().required("Användarnamn är obligatoriskt"),
   password: Yup.string()
     .required("Lösenord är obligatoriskt")
-    .min(
-      6,
-      "Lösenordet måste innehålla minst 6 tecken"
-    ),
+    .min(6, "Lösenordet måste innehålla minst 6 tecken"),
   confirmPassword: Yup.string()
-    .required(
-      "Bekräfta lösenord är obligatoriskt"
-    )
-    .oneOf(
-      [Yup.ref("password")],
-      "Lösenorden matchar inte"
-    ),
+    .required("Bekräfta lösenord är obligatoriskt")
+    .oneOf([Yup.ref("password")], "Lösenorden matchar inte"),
 });
 
 export default function SignUpForm() {
-  const [
-    registrationSuccess,
-    setRegistrationSuccess,
-  ] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const navigate = useNavigate();
   const formik = useFormik<SignupValues>({
     initialValues: {
@@ -53,16 +42,13 @@ export default function SignUpForm() {
     validationSchema: SignupSchema,
     onSubmit: async (values: SignupValues) => {
       try {
-        const response = await fetch(
-          "/api/users/register",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(values),
-          }
-        );
+        const response = await fetch("/api/users/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
 
         if (response.ok) {
           const data = await response.json();
@@ -72,40 +58,35 @@ export default function SignUpForm() {
           throw new Error(message);
         }
       } catch (error) {
-        console.error(
-          "Error registering user:",
-          error
-        );
-        formik.setFieldError(
-          "username",
-          error.message.replace(/"/g, "")
-        );
+        console.error("Error registering user:", error);
+        formik.setFieldError("username", error.message.replace(/"/g, ""));
       }
     },
   });
-
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <Paper
       elevation={6}
       sx={{
-        width: "40%",
+        maxWidth: "60rem",
+        width: "90%",
         margin: "auto",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        padding: "2rem",
       }}
     >
       <Box
         component="form"
         sx={{
           "& > :not(style)": {
-            m: 1,
-            width: "20rem",
+            width: isSmallScreen ? "15rem" : "25rem",
             display: "flex",
             flexDirection: "column",
             gap: "0.5rem",
-            margin: "2rem",
             height: "auto",
+            paddingBottom: "1rem",
           },
         }}
         noValidate
@@ -119,14 +100,8 @@ export default function SignUpForm() {
           value={formik.values.username}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.username &&
-            Boolean(formik.errors.username)
-          }
-          helperText={
-            formik.touched.username &&
-            formik.errors.username
-          }
+          error={formik.touched.username && Boolean(formik.errors.username)}
+          helperText={formik.touched.username && formik.errors.username}
           InputProps={{
             sx: { backgroundColor: "white" },
           }}
@@ -144,14 +119,8 @@ export default function SignUpForm() {
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.password &&
-            Boolean(formik.errors.password)
-          }
-          helperText={
-            formik.touched.password &&
-            formik.errors.password
-          }
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
           InputProps={{
             sx: { backgroundColor: "white" },
           }}
@@ -174,8 +143,7 @@ export default function SignUpForm() {
             Boolean(formik.errors.confirmPassword)
           }
           helperText={
-            formik.touched.confirmPassword &&
-            formik.errors.confirmPassword
+            formik.touched.confirmPassword && formik.errors.confirmPassword
           }
           InputProps={{
             sx: { backgroundColor: "white" },
@@ -186,11 +154,7 @@ export default function SignUpForm() {
             },
           }}
         />
-        <Button
-          color="secondary"
-          type="submit"
-          variant="contained"
-        >
+        <Button color="secondary" type="submit" variant="contained">
           Skapa konto
         </Button>
       </Box>
@@ -220,8 +184,7 @@ export default function SignUpForm() {
               navigate("/");
             }}
           >
-            Ditt konto har skapats! Vi skickar dig
-            nu tillbaka till startsidan
+            Ditt konto har skapats! Vi skickar dig nu tillbaka till startsidan
           </Alert>
         </Snackbar>
       </Portal>
