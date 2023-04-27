@@ -2,33 +2,20 @@ import { Box, Button, Paper } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { PostContext } from "../Context/PostContext";
-import { User } from "../Context/UserContext";
+import { UserContext } from "../Context/UserContext";
 
 export default function Posts() {
   const { posts, deletePost } = useContext(PostContext);
-  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
+  const { user } = useContext(UserContext);
+  const [updatedPosts, setUpdatedPosts] = useState(posts);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const response = await fetch("/api/users/me");
-      const data = await response.json();
-      if (response.ok) {
-        setCurrentUser(data);
-      } else {
-        setCurrentUser(undefined);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  useEffect(() => {
-    console.log(currentUser); // Log currentUser object
-  }, [currentUser]);
+    setUpdatedPosts(posts);
+  }, [posts]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-      {[...posts].reverse().map((post, index) => (
+      {[...updatedPosts].reverse().map((post, index) => (
         <Paper
           key={index}
           elevation={2}
@@ -57,15 +44,14 @@ export default function Posts() {
           </NavLink>
 
           <p>{post.content}</p>
-          {currentUser &&
-            (currentUser._id === post.author || currentUser.isAdmin) && (
-              <Button onClick={() => deletePost(post._id, index)}>
-                Remove Post
-              </Button>
-            )}
+
+          {user && (user._id === post.author || user.isAdmin) && (
+            <Button onClick={() => deletePost(post._id)}>Remove Post</Button>
+          )}
+
         </Paper>
       ))}
-      <p>Number of posts: {posts.length}</p>
+      <p>Number of posts: {updatedPosts.length}</p>
     </Box>
   );
 }

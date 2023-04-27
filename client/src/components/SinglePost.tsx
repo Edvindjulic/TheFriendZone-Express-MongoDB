@@ -16,7 +16,7 @@ export default function SinglePost() {
       Title: {selectedPost?.title} <br />
       Content: {selectedPost?.content} <br />
       Author: {selectedPost?.author} <br />
-      {user && (selectedPost?.author === user.id || user.isAdmin) ? (
+      {user && (selectedPost?.author === user._id || user.isAdmin) ? (
         <UpdateForm id={selectedPost?._id} />
       ) : (
         "Du kan inte göra grejer med denna posten"

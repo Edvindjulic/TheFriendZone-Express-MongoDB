@@ -9,28 +9,27 @@ import { UserContext } from "../Context/UserContext";
 import AccountMenu from "../components/AccountMenu";
 
 export default function Admin() {
-  const { user, getAllUsers, removeUser, changeAdmin } =
+  const { user, removeUser, changeAdmin, allUsers, getAllUsers, setAllUsers } =
     React.useContext(UserContext);
-  const [allUsers, setAllUsers] = React.useState([]);
-
-  const handleGetAllUsers = async () => {
-    const data = await getAllUsers();
-    setAllUsers(data);
-  };
 
   const handleRemoveUser = async (userId: string) => {
     await removeUser(userId);
-    handleGetAllUsers(); // Refresh the list of users after a user is removed
+    await getAllUsers();
   };
 
   const handleToggleAdmin = async (userId: string, isAdmin: boolean) => {
     const newIsAdmin = !isAdmin;
     await changeAdmin(userId, newIsAdmin);
-    handleGetAllUsers(); // Refresh the list of users after a user's isAdmin status is toggled
+    await getAllUsers();
   };
+
   React.useEffect(() => {
-    handleGetAllUsers();
-  }, []);
+    const fetchAllUsers = async () => {
+      const users = await getAllUsers();
+      setAllUsers(users);
+    };
+    fetchAllUsers();
+  }, [getAllUsers, setAllUsers]);
 
   return (
     <>

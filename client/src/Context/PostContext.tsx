@@ -11,7 +11,7 @@ export const PostContext = createContext(
   {} as {
     posts: Post[];
     addPost: (post: Post) => void;
-    deletePost: (id: string, index: number) => void;
+    deletePost: (id: string) => void;
     updatePost: (post: Post) => void;
   }
 );
@@ -41,58 +41,38 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Registration successful, user:", data);
+        console.log("Post creation successful, post:", data);
+        setPosts([...posts, data]);
       } else {
         const message = await response.text();
         throw new Error(message);
       }
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.error("Error creating post:", error);
     }
 
-    setPosts([...posts, newPost]);
     console.log(newPost);
   }
 
-  async function deletePost(_id: string, index: number) {
-    console.log("Deleting post with ID:", _id);
-    const userResponse = await fetch("/api/users");
-    const user = await userResponse.json();
-
+  async function deletePost(id: string) {
     try {
-      if (index >= 0 && index < posts.length) {
-        // Check if index is valid
-        const postOwnerId = posts[index]?.author?.toString();
-        console.log(postOwnerId);
-        if (user.id !== postOwnerId && !user.isAdmin) {
-          console.log("user is not authorized to delete this post");
-          return;
-        }
-      } else {
-        console.log("Invalid index");
-        return;
-      }
-
-      const response = await fetch(`/api/posts/${_id}`, {
+      const response = await fetch(`/api/posts/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      if (response.ok) {
-        console.log("post deleted successfully");
-        const updatedPosts = posts.filter((post, i) => i !== index);
-        // setPosts([...posts, updatedPosts]);
-      } else {
-        console.log("error deleting");
-        const message = await response.text();
-        throw new Error(message);
+      if (!response.ok) {
+        const errorMessage = await response.json();
+        throw new Error(errorMessage.message);
       }
+      setPosts(posts.filter((post) => post._id !== id));
     } catch (error) {
-      console.error("error deleting post", error);
+      console.error("Could not delete the post:", error);
     }
   }
+
   type UpdatedPost = {
     _id: string;
     title: string;
@@ -113,8 +93,11 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
         const data = await response.json();
         console.log("Update successful, post:", data);
 
-        // Update the state with the updated post
-        setPosts(posts.map((post) => (post._id === updatedPost._id ? updatedPost : post)));
+        setPosts(
+          posts.map((post) =>
+            post._id === updatedPost._id ? updatedPost : post
+          )
+        );
       } else {
         const message = await response.text();
         throw new Error(message);

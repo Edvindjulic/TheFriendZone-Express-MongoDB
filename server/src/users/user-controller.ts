@@ -112,10 +112,10 @@ export async function updateUser(req: Request, res: Response) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    user.isAdmin = newIsAdmin;
-    await user.save();
+    await UserModel.updateOne({ _id: userId }, { isAdmin: newIsAdmin });
 
-    const { password, ...userWithoutPassword } = user.toObject();
+    const updatedUser = await UserModel.findById(userId);
+    const { password, ...userWithoutPassword } = updatedUser.toObject();
 
     res.status(200).json(userWithoutPassword);
   } catch (error) {
