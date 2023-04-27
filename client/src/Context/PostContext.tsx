@@ -41,7 +41,6 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Post creation successful, post:", data);
         setPosts([...posts, data]);
       } else {
         const message = await response.text();
@@ -50,8 +49,6 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error("Error creating post:", error);
     }
-
-    console.log(newPost);
   }
 
   async function deletePost(id: string) {
@@ -80,7 +77,6 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     author: string;
   };
   async function updatePost(updatedPost: UpdatedPost) {
-    console.log(updatedPost);
     try {
       const response = await fetch(`/api/posts/${updatedPost._id}`, {
         method: "PUT",
@@ -91,7 +87,6 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log("Update successful, post:", data);
 
         setPosts(
           posts.map((post) =>
