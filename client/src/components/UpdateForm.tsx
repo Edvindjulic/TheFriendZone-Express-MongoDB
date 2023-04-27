@@ -36,18 +36,19 @@ export default function UpdateForm(id: string) {
 
   return (
     <>
-      Post ID: {displayID.id} <br />
-      {postValues?.title} <br />
-      {postValues?.content} <br />
-      {postValues?.author} <br />
       <Box
-        sx={{ padding: "1.2rem" }}
+        sx={{
+          padding: "1.2rem",
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+        }}
         component="form"
         noValidate
         onSubmit={formik.handleSubmit}
       >
         <TextField
-          label="Titel"
+          label="Rubrik"
           variant="outlined"
           type="text"
           size="medium"
@@ -57,8 +58,10 @@ export default function UpdateForm(id: string) {
           onBlur={formik.handleBlur}
         />
         <TextField
-          label="Skriv ditt inlägg..."
+          label="Vad vill du säga"
           variant="outlined"
+          multiline
+          rows={4}
           type="text"
           name="content"
           defaultValue={postValues?.content}
@@ -78,7 +81,7 @@ export default function UpdateForm(id: string) {
             },
           }}
         >
-          Posta
+          Ändra
         </Button>
       </Box>
     </>
