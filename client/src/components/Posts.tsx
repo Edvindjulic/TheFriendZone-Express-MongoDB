@@ -5,21 +5,25 @@ import { User } from "../Context/UserContext";
 
 export default function Posts() {
   const { posts, deletePost } = useContext(PostContext);
-  const [currentUser, setCurrentUser] = useState<User>({
-    _id: "",
-    username: "",
-    isAdmin: false,
-  });
+  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
     const fetchUser = async () => {
       const response = await fetch("/api/users/me");
       const data = await response.json();
-      setCurrentUser(data);
+      if (response.ok) {
+        setCurrentUser(data);
+      } else {
+        setCurrentUser(undefined);
+      }
     };
 
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    console.log(currentUser); // Log currentUser object
+  }, [currentUser]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -38,9 +42,11 @@ export default function Posts() {
         >
           <h4 style={{ marginBottom: "1rem" }}>{post.title}</h4>
           <p>{post.content}</p>
-          {currentUser._id === post.ownerId || currentUser.isAdmin ? (
+          {currentUser && (currentUser._id === post.author || currentUser.isAdmin) && (
+            // {user && (selectedPost?.author === user.id || user.isAdmin) ? (
+            // {currentUser._id === post.author || currentUser.isAdmin ? (
             <Button onClick={() => deletePost(post._id, index)}>Remove Post</Button>
-          ) : null}
+          )}
         </Paper>
       ))}
       <p>Number of posts: {posts.length}</p>

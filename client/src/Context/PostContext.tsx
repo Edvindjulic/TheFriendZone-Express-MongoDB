@@ -4,13 +4,12 @@ interface Post {
   _id: string;
   title: string;
   content: string;
-  ownerId: string;
+  author: string;
 }
 
 export const PostContext = createContext(
   {} as {
     posts: Post[];
-    filteredPosts: Post[];
     addPost: (post: Post) => void;
     deletePost: (id: string, index: number) => void;
   }
@@ -18,14 +17,12 @@ export const PostContext = createContext(
 
 export const PostProvider = ({ children }: { children: React.ReactNode }) => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("/api/posts");
       const data = await response.json();
       setPosts(data);
-      setFilteredPosts(data); // Initialize filtered posts with initial data
     };
 
     fetchData();
@@ -53,6 +50,7 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     setPosts([...posts, newPost]);
+    console.log(newPost);
   }
 
   async function deletePost(_id: string, index: number) {
@@ -63,7 +61,7 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       if (index >= 0 && index < posts.length) {
         // Check if index is valid
-        const postOwnerId = posts[index]?.ownerId?.toString();
+        const postOwnerId = posts[index]?.author?.toString();
         console.log(postOwnerId);
         if (user.id !== postOwnerId && !user.isAdmin) {
           console.log("user is not authorized to delete this post");
@@ -84,8 +82,7 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
       if (response.ok) {
         console.log("post deleted successfully");
         const updatedPosts = posts.filter((post, i) => i !== index);
-        setPosts(updatedPosts);
-        setFilteredPosts(updatedPosts); // Set the filtered array
+        // setPosts([...posts, updatedPosts]);
       } else {
         console.log("error deleting");
         const message = await response.text();
@@ -97,8 +94,6 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <PostContext.Provider value={{ posts, filteredPosts, addPost, deletePost }}>
-      {children}
-    </PostContext.Provider>
+    <PostContext.Provider value={{ posts, addPost, deletePost }}>{children}</PostContext.Provider>
   );
 };
