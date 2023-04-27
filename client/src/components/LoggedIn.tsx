@@ -64,7 +64,10 @@ export default function LoggedIn() {
             sx={{
               display: "flex",
               flexDirection: "column",
+              marginLeft: "auto",
+              marginRight: "auto",
               gap: "1.2rem",
+              maxWidth: "1200px"
             }}
           >
             <TextField
