@@ -1,10 +1,19 @@
-import { AppBar, Box, Button, TextField } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { useFormik } from "formik";
 import { useContext } from "react";
 import * as Yup from "yup";
 import { PostContext } from "../Context/PostContext";
+import { UserContext } from "../Context/UserContext";
 import AccountMenu from "./AccountMenu";
 import Posts from "./Posts";
+import { theme } from "./theme";
 
 export interface PostValues {
   title: string;
@@ -37,14 +46,27 @@ export default function LoggedIn() {
     },
   });
 
+  const { user } = useContext(UserContext);
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Box>
       <AppBar
         position="sticky"
         sx={{
           height: "5rem",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
         }}
       >
+        <Typography
+          variant={isSmallScreen ? "h6" : "h4"}
+          color="secondary.contrastText"
+        >
+          Välkommen, {user?.username}!
+        </Typography>
         <AccountMenu />
       </AppBar>
       <Box
@@ -67,7 +89,7 @@ export default function LoggedIn() {
               marginLeft: "auto",
               marginRight: "auto",
               gap: "1.2rem",
-              maxWidth: "1200px"
+              maxWidth: "1200px",
             }}
           >
             <TextField
