@@ -13,3 +13,9 @@ export function adminAuth(req: Request, res: Response, next: NextFunction) {
   }
   next();
 }
+
+//för att skapa deleteknappen om du är författare av post
+export function getUsername(req: Request, res: Response) {
+  const username = req.session?.username;
+  res.json(username);
+}

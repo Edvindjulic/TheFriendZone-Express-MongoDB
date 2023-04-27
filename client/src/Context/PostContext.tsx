@@ -51,20 +51,39 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     setPosts([...posts, newPost]);
-
-   
+    console.log(newPost);
   }
 
-  async function deletePost(id: string, index: Number) {
+  async function deletePost(_id: string, index: number) {
+    console.log("Deleting post with ID:", _id);
+    const userResponse = await fetch("/api/users");
+    const user = await userResponse.json();
+
     try {
-      const response = await fetch(`/api/posts/${id}`, {
+      if (index >= 0 && index < posts.length) {
+        // Check if index is valid
+        const postOwnerId = posts[index]?.author?.toString();
+        console.log(postOwnerId);
+        if (user.id !== postOwnerId && !user.isAdmin) {
+          console.log("user is not authorized to delete this post");
+          return;
+        }
+      } else {
+        console.log("Invalid index");
+        return;
+      }
+
+      const response = await fetch(`/api/posts/${_id}`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       if (response.ok) {
-        console.log("post deleted succesfully");
+        console.log("post deleted successfully");
         const updatedPosts = posts.filter((post, i) => i !== index);
-        setPosts(updatedPosts);
+        // setPosts([...posts, updatedPosts]);
       } else {
         console.log("error deleting");
         const message = await response.text();
@@ -73,7 +92,6 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error("error deleting post", error);
     }
-
   }
   type UpdatedPost = {
     _id: string;
@@ -96,11 +114,7 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
         console.log("Update successful, post:", data);
 
         // Update the state with the updated post
-        setPosts(
-          posts.map((post) =>
-            post._id === updatedPost._id ? updatedPost : post
-          )
-        );
+        setPosts(posts.map((post) => (post._id === updatedPost._id ? updatedPost : post)));
       } else {
         const message = await response.text();
         throw new Error(message);

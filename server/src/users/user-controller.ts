@@ -17,7 +17,7 @@ export async function registerUser(req: Request, res: Response) {
       await userSchema.validate(user);
     } catch (error) {
       res.set("content-type", "application/json");
-      return res.status(400).send(JSON.stringify(error.message));
+      return res.status(400).json(JSON.stringify(error.message));
     }
 
     const users = await UserModel.find({ username: username });
@@ -85,6 +85,7 @@ export async function loginUser(req: Request, res: Response) {
     req.session!.isAdmin = user.isAdmin === true;
     req.session!._id = user._id;
 
+    const { password: _, ...userData } = user.toObject();
     res.status(200).json(req.session);
   } catch (error) {
     console.error("Error finding user:", error);

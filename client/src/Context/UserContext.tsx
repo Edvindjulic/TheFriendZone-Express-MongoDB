@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 
-interface User {
+export interface User {
   _id?: string;
   id?: string;
   username: string;
@@ -43,7 +43,7 @@ export default function UserProvider({ children }: Props) {
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
-        console.log(userData);
+        // console.log(userData);
       } else {
         console.error("Error fetching user data:", response.statusText);
       }
@@ -117,9 +117,7 @@ export default function UserProvider({ children }: Props) {
   }
 
   return (
-    <UserContext.Provider
-      value={{ user, setUser, logout, getAllUsers, removeUser, changeAdmin }}
-    >
+    <UserContext.Provider value={{ user, setUser, logout, getAllUsers, removeUser, changeAdmin }}>
       {children}
     </UserContext.Provider>
   );
