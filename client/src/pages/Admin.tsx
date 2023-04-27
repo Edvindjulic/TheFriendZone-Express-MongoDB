@@ -63,7 +63,7 @@ export default function Admin() {
             }}
           >
             <Box sx={{ flexGrow: 3 }} />
-            <Typography variant="h4" sx={{ position: "absolute" }}>
+            <Typography variant="h5" sx={{ position: "absolute" }}>
               Adminsida
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
