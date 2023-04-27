@@ -45,12 +45,24 @@ export default function Posts() {
             backgroundColor: "white",
           }}
         >
-          <NavLink to={"/post/" + post._id}>Gå till denna posten!</NavLink>
-          <h4 style={{ marginBottom: "1rem" }}>{post.title}</h4>
+          <NavLink
+            to={"/post/" + post._id}
+            style={{
+              color: "black",
+              cursor: "pointer",
+              marginBottom: "1rem",
+            }}
+          >
+            <h4 style={{ marginBottom: "1rem" }}>{post.title}</h4>
+          </NavLink>
+
           <p>{post.content}</p>
-          {currentUser && (currentUser._id === post.author || currentUser.isAdmin) && (
-            <Button onClick={() => deletePost(post._id, index)}>Remove Post</Button>
-          )}
+          {currentUser &&
+            (currentUser._id === post.author || currentUser.isAdmin) && (
+              <Button onClick={() => deletePost(post._id, index)}>
+                Remove Post
+              </Button>
+            )}
         </Paper>
       ))}
       <p>Number of posts: {posts.length}</p>

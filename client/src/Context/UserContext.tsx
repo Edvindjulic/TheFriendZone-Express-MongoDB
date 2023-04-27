@@ -117,7 +117,9 @@ export default function UserProvider({ children }: Props) {
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser, logout, getAllUsers, removeUser, changeAdmin }}>
+    <UserContext.Provider
+      value={{ user, setUser, logout, getAllUsers, removeUser, changeAdmin }}
+    >
       {children}
     </UserContext.Provider>
   );
