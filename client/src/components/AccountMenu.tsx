@@ -34,16 +34,15 @@ export default function AccountMenu() {
           textAlign: "center",
           justifyContent: "end",
           position: "relative",
+          padding: "1.5rem"
         }}
       >
-        <Typography sx={{ minWidth: 100 }}>Ska vi ens</Typography>
-        <Typography sx={{ minWidth: 100 }}>Ha dom här?</Typography>
         {user?.isAdmin && (
           <Box
             sx={{
               position: "absolute",
-              top: "-12px",
-              right: "11px",
+              top: "13%",
+              right: "33px",
               zIndex: 1,
             }}
           >
