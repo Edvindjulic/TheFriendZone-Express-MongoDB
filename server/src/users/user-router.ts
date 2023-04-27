@@ -5,6 +5,7 @@ import {
   deleteUser,
   getAllUsers,
   getSelf,
+  getUsernameById,
   loginUser,
   logoutUser,
   registerUser,
@@ -19,8 +20,7 @@ const userRouter = express
   .post("/api/users/logout", logoutUser)
   .put("/api/users/:id", adminAuth, updateUser)
   .delete("/api/users/:id", adminAuth, deleteUser)
-  .get("/api/users/me", getSelf);
-// .get("/users/me", adminAuth, getSelf)
-// Hämta user från req.session
+  .get("/api/users/me", getSelf)
+  .get("/api/users/:id", getUsernameById);
 
 export default userRouter;

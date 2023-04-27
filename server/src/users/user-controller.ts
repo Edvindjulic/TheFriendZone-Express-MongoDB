@@ -1,5 +1,6 @@
 import argon2 from "argon2";
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 import * as yup from "yup";
 import { UserModel } from "./user-model";
 
@@ -162,5 +163,25 @@ export async function getSelf(req: Request, res: Response) {
       message: "An error occurred",
       error: (error as any).message,
     });
+  }
+}
+
+export async function getUsernameById(req: Request, res: Response) {
+  try {
+    const userId = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
+    const user = await UserModel.findOne({ _id: userId }, "username");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user by ID:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 }

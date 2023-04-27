@@ -64,7 +64,7 @@ export default function Admin() {
           >
             <Box sx={{ flexGrow: 3 }} />
             <Typography variant="h4" sx={{ position: "absolute" }}>
-              Admin Page
+              Adminsida
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <AccountMenu />
@@ -81,7 +81,6 @@ export default function Admin() {
               marginBottom: "2rem",
             }}
           >
-            {" "}
             <Table
               aria-label="simple table"
               size="small"
@@ -93,7 +92,6 @@ export default function Admin() {
                     bgcolor: "secondary.main",
                   }}
                 >
-                  {" "}
                   <TableCell
                     align="center"
                     sx={{ typography: "h7", color: "secondary.contrastText" }}
@@ -130,7 +128,6 @@ export default function Admin() {
                       {user.username}
                     </TableCell>
                     <TableCell align="center">
-                      {" "}
                       {user.isAdmin ? "ja" : "nej"}
                     </TableCell>
                     <TableCell align="center">
@@ -142,17 +139,16 @@ export default function Admin() {
                         }
                       >
                         Ändra
-                      </Button>{" "}
+                      </Button>
                     </TableCell>
                     <TableCell align="center">
                       <Button
-                        sx={{ typography: "" }}
                         variant="contained"
                         color="error"
                         onClick={() => handleRemoveUser(user._id)}
                       >
-                        Ta bort{" "}
-                      </Button>{" "}
+                        Ta bort
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
