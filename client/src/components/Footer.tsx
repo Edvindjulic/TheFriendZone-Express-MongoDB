@@ -6,9 +6,6 @@ export default function Footer() {
       sx={{
         height: "auto",
         width: "100%",
-        position: "fixed",
-        bottom: 0,
-        left: 0,
       }}
     >
       <Typography
