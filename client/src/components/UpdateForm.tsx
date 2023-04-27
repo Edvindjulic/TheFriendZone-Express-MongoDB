@@ -1,25 +1,16 @@
-import {
-  Box,
-  Button,
-  TextField,
-} from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { PostContext } from "../Context/PostContext";
-import {
-  PostSchema,
-  PostValues,
-} from "./LoggedIn";
+import { PostSchema, PostValues } from "./LoggedIn";
 
 export default function UpdateForm(id: string) {
   const navigate = useNavigate();
   const { posts } = useContext(PostContext);
   const { updatePost } = useContext(PostContext);
   const displayID = id;
-  const postValues = posts.find(
-    (post) => post._id === displayID.id
-  );
+  const postValues = posts.find((post) => post._id === displayID.id);
 
   const defaultValues: PostValues = {
     title: "",
@@ -27,11 +18,8 @@ export default function UpdateForm(id: string) {
   };
 
   const initialValues: PostValues = {
-    title:
-      postValues?.title || defaultValues.title,
-    content:
-      postValues?.content ||
-      defaultValues.content,
+    title: postValues?.title || defaultValues.title,
+    content: postValues?.content || defaultValues.content,
   };
 
   const formik = useFormik<PostValues>({
@@ -79,7 +67,6 @@ export default function UpdateForm(id: string) {
           rows={4}
           type="text"
           name="content"
-          defaultValue={postValues?.content}
           value={formik.values.content}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}

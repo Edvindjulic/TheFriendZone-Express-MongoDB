@@ -49,7 +49,7 @@ export default function AccountMenu() {
             👑{" "}
           </Box>
         )}
-        <Tooltip title="Account settings">
+        <Tooltip title="Mitt konto">
           <IconButton
             onClick={handleClick}
             size="small"
@@ -58,18 +58,6 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            {/* {user?.isAdmin && (
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "-12px",
-                  left: "11px",
-                  zIndex: 50,
-                }}
-              >
-                👑{" "}
-              </Box>
-            )} */}
             <Avatar
               sx={{ width: 32, height: 32, backgroundColor: "secondary.main" }}
             >
@@ -118,15 +106,16 @@ export default function AccountMenu() {
           <Avatar /> {user?.username}
         </MenuItem>
         <Divider />
-
-        <NavLink to="./admin" style={{ textDecoration: "none" }}>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Settings fontSize="small" />
-            </ListItemIcon>
-            Admin-panel
-          </MenuItem>
-        </NavLink>
+        {user?.isAdmin ? (
+          <NavLink to="./admin" style={{ textDecoration: "none" }}>
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <Settings fontSize="small" />
+              </ListItemIcon>
+              Admin-panel
+            </MenuItem>
+          </NavLink>
+        ) : null}
         <MenuItem
           onClick={() => {
             handleClose();
