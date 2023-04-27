@@ -24,7 +24,7 @@ export async function registerUser(req: Request, res: Response) {
     const users = await UserModel.find({ username: username });
     if (users.length > 0) {
       res.set("content-type", "application/json");
-      return res.status(409).send(JSON.stringify("Username already in use"));
+      return res.status(409).send(JSON.stringify("Användarnamnet är upptaget"));
     }
 
     const result = await UserModel.create(user);
