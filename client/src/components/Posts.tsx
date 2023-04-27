@@ -1,30 +1,12 @@
 import { Box, Button, Paper } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { PostContext } from "../Context/PostContext";
-import { User } from "../Context/UserContext";
+import { UserContext } from "../Context/UserContext";
 
 export default function Posts() {
   const { posts, deletePost } = useContext(PostContext);
-  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const response = await fetch("/api/users/me");
-      const data = await response.json();
-      if (response.ok) {
-        setCurrentUser(data);
-      } else {
-        setCurrentUser(undefined);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  useEffect(() => {
-    console.log(currentUser); // Log currentUser object
-  }, [currentUser]);
+  const { user } = useContext(UserContext);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -48,8 +30,8 @@ export default function Posts() {
           <NavLink to={"/post/" + post._id}>Gå till denna posten!</NavLink>
           <h4 style={{ marginBottom: "1rem" }}>{post.title}</h4>
           <p>{post.content}</p>
-          {currentUser && (currentUser._id === post.author || currentUser.isAdmin) && (
-            <Button onClick={() => deletePost(post._id, index)}>Remove Post</Button>
+          {user && (user._id === post.author || user.isAdmin) && (
+            <Button onClick={() => deletePost(post._id)}>Remove Post</Button>
           )}
         </Paper>
       ))}

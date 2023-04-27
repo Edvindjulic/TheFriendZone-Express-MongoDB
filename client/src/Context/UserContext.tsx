@@ -14,6 +14,8 @@ interface UserContextType {
   getAllUsers: () => Promise<User[]>;
   removeUser: (id: string) => Promise<void>;
   changeAdmin: (id: string, isAdmin: boolean) => Promise<void>;
+  allUsers: User[];
+  setAllUsers: (users: User[]) => void;
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -22,6 +24,8 @@ export const UserContext = createContext<UserContextType>({
   getAllUsers: async () => [],
   removeUser: async () => {},
   changeAdmin: async () => {},
+  allUsers: [],
+  setAllUsers: () => {},
 });
 
 interface Props {
@@ -30,7 +34,8 @@ interface Props {
 
 export default function UserProvider({ children }: Props) {
   const [user, setUser] = useState<User>();
-  // Handledning från David. Hämta user från server vid refresh av sidan.
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("/api/users/me", {
@@ -70,10 +75,19 @@ export default function UserProvider({ children }: Props) {
     }
   }
 
-  async function getAllUsers() {
-    const response = await fetch("/api/users");
-    const data = await response.json();
-    return data;
+  async function getAllUsers(): Promise<User[]> {
+    if (!user || !user.isAdmin) {
+      return [];
+    }
+
+    try {
+      const response = await fetch("/api/users");
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching all users:", error);
+      return [];
+    }
   }
 
   async function removeUser(id: string) {
@@ -117,7 +131,18 @@ export default function UserProvider({ children }: Props) {
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser, logout, getAllUsers, removeUser, changeAdmin }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        logout,
+        getAllUsers,
+        removeUser,
+        changeAdmin,
+        allUsers,
+        setAllUsers,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );
