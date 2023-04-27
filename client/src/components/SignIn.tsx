@@ -43,7 +43,7 @@ export default function SignInForm() {
           const data = await response.json();
 
           await new Promise((resolve) =>
-            setTimeout(resolve, 3000)
+            setTimeout(resolve, 2000)
           );
 
           setUser(data);
@@ -144,7 +144,16 @@ export default function SignInForm() {
           disabled={loading}
         >
           {loading ? (
-            <CircularProgress size={24} />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <CircularProgress size={24} />
+            </Box>
           ) : (
             "Logga in"
           )}
