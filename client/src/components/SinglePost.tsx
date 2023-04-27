@@ -52,7 +52,10 @@ export default function SinglePost() {
           <CardContent>
             <h2>{selectedPost?.title}</h2>
             <p>{selectedPost?.content}</p>
-            <p>Author: {authorName}</p>
+            <p>
+              {" "}
+              <b> {authorName}</b>
+            </p>
           </CardContent>
         </Card>
         {user && (selectedPost?.author === user._id || user.isAdmin) && (

@@ -54,7 +54,9 @@ export default function Posts() {
           </NavLink>
 
           <p>{post.content}</p>
-          <p>Author: {post.authorName}</p>
+          <p>
+            <b> {post.authorName}</b>
+          </p>
           {user && (user._id === post.author || user.isAdmin) && (
             <Button onClick={() => deletePost(post._id)}>Remove Post</Button>
           )}
