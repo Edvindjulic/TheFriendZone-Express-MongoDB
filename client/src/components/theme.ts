@@ -22,7 +22,7 @@ export const theme = createTheme({
       "Libre Franklin",
     ].join(","),
     h6: {
-      fontWeight: 200,
+      fontWeight: 600,
       fontFamily: "Libre Franklin",
       fontSize: "20px",
     },
