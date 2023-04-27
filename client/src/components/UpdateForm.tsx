@@ -1,9 +1,10 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery } from "@mui/material";
 import { useFormik } from "formik";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { PostContext } from "../Context/PostContext";
 import { PostSchema, PostValues } from "./LoggedIn";
+import { theme } from "./theme";
 
 export default function UpdateForm(id: string) {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ export default function UpdateForm(id: string) {
       navigate("/");
     },
   });
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <>
@@ -45,6 +47,7 @@ export default function UpdateForm(id: string) {
           display: "flex",
           flexDirection: "column",
           gap: "1rem",
+          width: isSmallScreen ? "18rem" : "27em",
         }}
         component="form"
         noValidate
