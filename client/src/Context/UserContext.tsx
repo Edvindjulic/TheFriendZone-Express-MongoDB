@@ -16,6 +16,7 @@ interface UserContextType {
   changeAdmin: (id: string, isAdmin: boolean) => Promise<void>;
   allUsers: User[];
   setAllUsers: (users: User[]) => void;
+  getUsernameById: (id: string) => Promise<string>;
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -26,6 +27,7 @@ export const UserContext = createContext<UserContextType>({
   changeAdmin: async () => {},
   allUsers: [],
   setAllUsers: () => {},
+  getUsernameById: async () => "",
 });
 
 interface Props {
@@ -130,10 +132,23 @@ export default function UserProvider({ children }: Props) {
     }
   }
 
+  const getUsernameById = async (userId: string) => {
+    try {
+      const response = await fetch(`/api/users/${userId}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        return data.username;
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching username by ID:", error);
+    }
+  };
+
   return (
     <UserContext.Provider
-
-
       value={{
         user,
         setUser,
@@ -143,8 +158,8 @@ export default function UserProvider({ children }: Props) {
         changeAdmin,
         allUsers,
         setAllUsers,
+        getUsernameById,
       }}
-
     >
       {children}
     </UserContext.Provider>

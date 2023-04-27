@@ -6,12 +6,22 @@ import { UserContext } from "../Context/UserContext";
 
 export default function Posts() {
   const { posts, deletePost } = useContext(PostContext);
-  const { user } = useContext(UserContext);
+  const { user, getUsernameById } = useContext(UserContext);
   const [updatedPosts, setUpdatedPosts] = useState(posts);
 
   useEffect(() => {
-    setUpdatedPosts(posts);
-  }, [posts]);
+    const fetchUsernames = async () => {
+      const updatedPosts = await Promise.all(
+        posts.map(async (post) => {
+          const username = await getUsernameById(post.author);
+          return { ...post, authorName: username };
+        })
+      );
+      setUpdatedPosts(updatedPosts);
+    };
+
+    fetchUsernames();
+  }, [posts, getUsernameById]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -44,11 +54,10 @@ export default function Posts() {
           </NavLink>
 
           <p>{post.content}</p>
-
+          <p>Author: {post.authorName}</p>
           {user && (user._id === post.author || user.isAdmin) && (
             <Button onClick={() => deletePost(post._id)}>Remove Post</Button>
           )}
-
         </Paper>
       ))}
       <p>Number of posts: {updatedPosts.length}</p>
