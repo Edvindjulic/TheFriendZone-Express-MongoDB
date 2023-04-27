@@ -1,5 +1,5 @@
 import { Box, Button, Paper } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { PostContext } from "../Context/PostContext";
 import { UserContext } from "../Context/UserContext";
@@ -7,10 +7,15 @@ import { UserContext } from "../Context/UserContext";
 export default function Posts() {
   const { posts, deletePost } = useContext(PostContext);
   const { user } = useContext(UserContext);
+  const [updatedPosts, setUpdatedPosts] = useState(posts);
+
+  useEffect(() => {
+    setUpdatedPosts(posts);
+  }, [posts]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-      {[...posts].reverse().map((post, index) => (
+      {[...updatedPosts].reverse().map((post, index) => (
         <Paper
           key={index}
           elevation={2}
@@ -35,7 +40,7 @@ export default function Posts() {
           )}
         </Paper>
       ))}
-      <p>Number of posts: {posts.length}</p>
+      <p>Number of posts: {updatedPosts.length}</p>
     </Box>
   );
 }
