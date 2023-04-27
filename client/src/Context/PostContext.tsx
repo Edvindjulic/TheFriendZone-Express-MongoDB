@@ -41,14 +41,14 @@ export const PostProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Registration successful, user:", data);
-        setPosts([...posts, newPost]);
+        console.log("Post creation successful, post:", data);
+        setPosts([...posts, data]);
       } else {
         const message = await response.text();
         throw new Error(message);
       }
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.error("Error creating post:", error);
     }
 
     console.log(newPost);

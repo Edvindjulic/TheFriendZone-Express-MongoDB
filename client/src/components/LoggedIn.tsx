@@ -1,14 +1,8 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  TextField,
-} from "@mui/material";
+import { AppBar, Box, Button, TextField } from "@mui/material";
 import { useFormik } from "formik";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import * as Yup from "yup";
 import { PostContext } from "../Context/PostContext";
-import { UserContext } from "../Context/UserContext";
 import AccountMenu from "./AccountMenu";
 import Posts from "./Posts";
 
@@ -21,27 +15,15 @@ export const PostSchema = Yup.object().shape({
   title: Yup.string()
     .required("Titel är obligatoriskt")
     .min(3, "Rubriken måste vara minst 3 tecken")
-    .max(
-      40,
-      "Rubriken får inte vara längre än 40 tecken"
-    ),
+    .max(40, "Rubriken får inte vara längre än 40 tecken"),
   content: Yup.string()
     .required("Innehåll är obligatoriskt")
-    .min(
-      3,
-      "Innehållet måste vara minst 3 tecken"
-    )
-    .max(
-      280,
-      "Innehållet får inte vara längre än 280 tecken"
-    ),
+    .min(3, "Innehållet måste vara minst 3 tecken")
+    .max(280, "Innehållet får inte vara längre än 280 tecken"),
 });
 
 export default function LoggedIn() {
   const { addPost } = useContext(PostContext);
-  const { user, logout } =
-    useContext(UserContext);
-
 
   const formik = useFormik<PostValues>({
     initialValues: {
@@ -87,11 +69,7 @@ export default function LoggedIn() {
           >
             <TextField
               fullWidth
-              label={
-                formik.values.title
-                  ? null
-                  : "Rubrik"
-              }
+              label={formik.values.title ? null : "Rubrik"}
               variant="outlined"
               type="text"
               size="medium"
@@ -100,10 +78,9 @@ export default function LoggedIn() {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               sx={{
-                "& .MuiOutlinedInput-notchedOutline":
-                  {
-                    border: "none",
-                  },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                },
                 backgroundColor: "white",
               }}
               InputLabelProps={{
@@ -119,7 +96,6 @@ export default function LoggedIn() {
                 formik.touched.title &&
                 formik.errors.title
               }
-              
             />
             <Box
               sx={{
@@ -129,11 +105,7 @@ export default function LoggedIn() {
             >
               <TextField
                 fullWidth
-                label={
-                  formik.values.content
-                    ? null
-                    : "Vad vill du säga?"
-                }
+                label={formik.values.content ? null : "Vad vill du säga?"}
                 variant="outlined"
                 type="text"
                 size="medium"
@@ -142,13 +114,11 @@ export default function LoggedIn() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 sx={{
-                  "& .MuiOutlinedInput-notchedOutline":
-                    {
-                      border: "none",
-                    },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
                   backgroundColor: "white",
-                  borderBottom:
-                    "1px solid lightgrey",
+                  borderBottom: "1px solid lightgrey",
                   flex: 1,
                   marginRight: 1,
                   overflowWrap: "break-word", // To break the word
@@ -174,7 +144,6 @@ export default function LoggedIn() {
                   formik.touched.content &&
                   formik.errors.content
                 }
-                
               />
 
               <Box
