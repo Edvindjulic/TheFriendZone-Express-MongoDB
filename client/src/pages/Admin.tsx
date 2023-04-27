@@ -1,4 +1,11 @@
-import { Box, Button, TableCell, TableHead, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  TableCell,
+  TableHead,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,6 +14,7 @@ import TableRow from "@mui/material/TableRow";
 import React from "react";
 import { UserContext } from "../Context/UserContext";
 import AccountMenu from "../components/AccountMenu";
+import { theme } from "../components/theme";
 
 export default function Admin() {
   const { user, removeUser, changeAdmin, allUsers, getAllUsers, setAllUsers } =
@@ -30,6 +38,8 @@ export default function Admin() {
     };
     fetchAllUsers();
   }, [getAllUsers, setAllUsers]);
+
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <Box
@@ -60,14 +70,54 @@ export default function Admin() {
             <AccountMenu />
           </Box>
 
-          <TableContainer component={Paper} sx={{ maxWidth: 700 }}>
-            <Table sx={{ width: "100%", marginTop: "2rem" }} aria-label="simple table">
+          <TableContainer
+            component={Paper}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minWidth: 330,
+              maxWidth: 800,
+              marginBottom: "2rem",
+            }}
+          >
+            {" "}
+            <Table
+              aria-label="simple table"
+              size="small"
+              padding={isSmallScreen ? "none" : "normal"}
+            >
               <TableHead>
-                <TableRow>
-                  <TableCell>Användare</TableCell>
-                  <TableCell>Admin</TableCell>
-                  <TableCell>Behörighet</TableCell>
-                  <TableCell>Radera</TableCell>
+                <TableRow
+                  sx={{
+                    bgcolor: "secondary.main",
+                  }}
+                >
+                  {" "}
+                  <TableCell
+                    align="center"
+                    sx={{ typography: "h7", color: "secondary.contrastText" }}
+                  >
+                    Användare
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ typography: "h7", color: "secondary.contrastText" }}
+                  >
+                    Admin
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ typography: "h7", color: "secondary.contrastText" }}
+                  >
+                    Behörighet
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ typography: "h7", color: "secondary.contrastText" }}
+                  >
+                    Radera
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -76,20 +126,31 @@ export default function Admin() {
                     key={user._id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">
+                    <TableCell component="th" scope="row" align="center">
                       {user.username}
                     </TableCell>
-                    <TableCell>{user.isAdmin ? "ja" : "nej"}</TableCell>
-                    <TableCell>
+                    <TableCell align="center">
+                      {" "}
+                      {user.isAdmin ? "ja" : "nej"}
+                    </TableCell>
+                    <TableCell align="center">
                       <Button
-                        variant="outlined"
-                        onClick={() => handleToggleAdmin(user._id, user.isAdmin)}
+                        variant="contained"
+                        color="secondary"
+                        onClick={() =>
+                          handleToggleAdmin(user._id, user.isAdmin)
+                        }
                       >
                         Ändra
                       </Button>{" "}
                     </TableCell>
-                    <TableCell>
-                      <Button variant="outlined" onClick={() => handleRemoveUser(user._id)}>
+                    <TableCell align="center">
+                      <Button
+                        sx={{ typography: "" }}
+                        variant="contained"
+                        color="error"
+                        onClick={() => handleRemoveUser(user._id)}
+                      >
                         Ta bort{" "}
                       </Button>{" "}
                     </TableCell>
