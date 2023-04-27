@@ -19,7 +19,7 @@ export default function Header() {
     >
       <StyledNavLink to="/">
         <Typography
-          variant="h5"
+          variant="h4"
           sx={{
             padding: "0.5rem",
             color: "primary.main",
