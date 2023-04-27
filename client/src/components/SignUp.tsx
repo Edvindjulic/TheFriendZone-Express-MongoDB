@@ -1,7 +1,16 @@
-import { Box, Button, Paper, TextField } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Paper,
+  Portal,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import { useFormik } from "formik";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-
 
 interface SignupValues {
   username: string;
@@ -10,16 +19,31 @@ interface SignupValues {
 }
 
 const SignupSchema = Yup.object().shape({
-  username: Yup.string().required("Användarnamn är obligatoriskt"),
+  username: Yup.string().required(
+    "Användarnamn är obligatoriskt"
+  ),
   password: Yup.string()
     .required("Lösenord är obligatoriskt")
-    .min(6, "Lösenordet måste innehålla minst 6 tecken"),
+    .min(
+      6,
+      "Lösenordet måste innehålla minst 6 tecken"
+    ),
   confirmPassword: Yup.string()
-    .required("Bekräfta lösenord är obligatoriskt")
-    .oneOf([Yup.ref("password")], "Lösenorden matchar inte"),
+    .required(
+      "Bekräfta lösenord är obligatoriskt"
+    )
+    .oneOf(
+      [Yup.ref("password")],
+      "Lösenorden matchar inte"
+    ),
 });
 
 export default function SignUpForm() {
+  const [
+    registrationSuccess,
+    setRegistrationSuccess,
+  ] = useState(false);
+  const navigate = useNavigate();
   const formik = useFormik<SignupValues>({
     initialValues: {
       username: "",
@@ -28,27 +52,36 @@ export default function SignUpForm() {
     },
     validationSchema: SignupSchema,
     onSubmit: async (values: SignupValues) => {
-      console.log("vad fan som helst");
       try {
-        const response = await fetch("/api/users/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        });
+        const response = await fetch(
+          "/api/users/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Registration successful, user:", data);
+          setRegistrationSuccess(true);
         } else {
           const message = await response.text();
           throw new Error(message);
-        } 
-      }catch (error) {
-          console.error("Error registering user:", error);
         }
-      },
+      } catch (error) {
+        console.error(
+          "Error registering user:",
+          error
+        );
+        formik.setFieldError(
+          "username",
+          error.message.replace(/"/g, "")
+        );
+      }
+    },
   });
 
   return (
@@ -87,16 +120,20 @@ export default function SignUpForm() {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={
-            formik.touched.username && Boolean(formik.errors.username)
+            formik.touched.username &&
+            Boolean(formik.errors.username)
           }
           helperText={
-            formik.touched.username && formik.errors.username
+            formik.touched.username &&
+            formik.errors.username
           }
           InputProps={{
-            sx: { backgroundColor: "white"},
+            sx: { backgroundColor: "white" },
           }}
           FormHelperTextProps={{
-            sx: { backgroundColor: "transparent"}
+            sx: {
+              backgroundColor: "transparent",
+            },
           }}
         />
         <TextField
@@ -108,16 +145,20 @@ export default function SignUpForm() {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={
-            formik.touched.password && Boolean(formik.errors.password)
+            formik.touched.password &&
+            Boolean(formik.errors.password)
           }
           helperText={
-            formik.touched.password && formik.errors.password
+            formik.touched.password &&
+            formik.errors.password
           }
           InputProps={{
-            sx: { backgroundColor: "white"},
+            sx: { backgroundColor: "white" },
           }}
           FormHelperTextProps={{
-            sx: { backgroundColor: "transparent"}
+            sx: {
+              backgroundColor: "transparent",
+            },
           }}
         />
         <TextField
@@ -137,16 +178,53 @@ export default function SignUpForm() {
             formik.errors.confirmPassword
           }
           InputProps={{
-            sx: { backgroundColor: "white"},
+            sx: { backgroundColor: "white" },
           }}
           FormHelperTextProps={{
-            sx: { backgroundColor: "transparent"}
+            sx: {
+              backgroundColor: "transparent",
+            },
           }}
         />
-        <Button color="secondary" type="submit" variant="contained">
+        <Button
+          color="secondary"
+          type="submit"
+          variant="contained"
+        >
           Skapa konto
         </Button>
       </Box>
+      <Portal>
+        <Snackbar
+          autoHideDuration={3000}
+          open={registrationSuccess}
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+          onClose={() => {
+            setRegistrationSuccess(false);
+            navigate("/");
+          }}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+        >
+          <Alert
+            severity="success"
+            onClose={() => {
+              setRegistrationSuccess(false);
+              navigate("/");
+            }}
+          >
+            Ditt konto har skapats! Vi skickar dig
+            nu tillbaka till startsidan
+          </Alert>
+        </Snackbar>
+      </Portal>
     </Paper>
   );
 }
