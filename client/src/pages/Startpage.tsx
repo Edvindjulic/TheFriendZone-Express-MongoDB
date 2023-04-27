@@ -21,6 +21,8 @@ export default function Startpage() {
         width: "100%",
         display: "flex",
         flexDirection: isSmallScreen ? "column" : "row",
+        alignItems: isSmallScreen ? "center" : "flex-start",
+        justifyContent: isSmallScreen ? "center" : "flex-start",
       }}
     >
       {user ? (
@@ -32,7 +34,7 @@ export default function Startpage() {
           <Box
             sx={{
               width: isSmallScreen ? "100%" : isMediumScreen ? "30%" : "30%",
-              margin: "2rem 1rem 4rem 2rem",
+              margin: isSmallScreen ? "2rem 1rem" : "2rem 1rem 4rem 2rem",
             }}
           >
             {isLargeScreen && (
