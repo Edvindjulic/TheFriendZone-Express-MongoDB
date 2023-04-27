@@ -6,6 +6,7 @@ import {
   Paper,
   TextField,
   useMediaQuery,
+  Typography
 } from "@mui/material";
 import { useFormik } from "formik";
 import { useContext, useState } from "react";
@@ -159,7 +160,7 @@ export default function SignInForm() {
           )}
         </Button>
         <StyledNavLink to="/signup">
-          Har du inget konto? Skapa ett här!
+          <Typography variant="body2">Har du inget konto? Skapa ett här!</Typography>
         </StyledNavLink>
       </Box>
     </Paper>

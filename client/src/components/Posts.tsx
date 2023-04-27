@@ -68,7 +68,7 @@ export default function Posts() {
               justifyContent: "center",
               height: "auto",
               width: "97%",
-              maxWidth: "1200px",
+              maxWidth: "800px",
               margin: "0 auto",
               backgroundColor: "white",
             }}
@@ -79,9 +79,11 @@ export default function Posts() {
                 position: "absolute",
                 top: 8,
                 left: 8,
+                color: "primary.main",
+                padding: "0.2rem"
               }}
             >
-              <b>{post.authorName}</b>
+              {post.authorName}
             </Typography>
             <StyledNavLink
               to={"/post/" + post._id}
