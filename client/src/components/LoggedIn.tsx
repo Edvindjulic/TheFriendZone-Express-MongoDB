@@ -89,7 +89,7 @@ export default function LoggedIn() {
               marginLeft: "auto",
               marginRight: "auto",
               gap: "1.2rem",
-              maxWidth: "1200px",
+              maxWidth: "800px"
             }}
           >
             <TextField
