@@ -1,6 +1,5 @@
 import Logout from "@mui/icons-material/Logout";
 import Settings from "@mui/icons-material/Settings";
-import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -35,7 +34,7 @@ export default function AccountMenu() {
           textAlign: "center",
           justifyContent: "end",
           position: "relative",
-          padding: "1.5rem"
+          padding: "1.5rem",
         }}
       >
         {user?.isAdmin && (
@@ -116,7 +115,7 @@ export default function AccountMenu() {
       >
         <MenuItem onClick={handleClose}></MenuItem>
         <MenuItem onClick={handleClose}>
-          <Avatar /> Profile (vet ej)
+          <Avatar /> {user?.username}
         </MenuItem>
         <Divider />
 

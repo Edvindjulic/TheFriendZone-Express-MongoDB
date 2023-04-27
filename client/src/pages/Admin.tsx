@@ -64,7 +64,7 @@ export default function Admin() {
           >
             <Box sx={{ flexGrow: 3 }} />
             <Typography variant="h4" sx={{ position: "absolute" }}>
-              Admin Page
+              Adminsida
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <AccountMenu />
