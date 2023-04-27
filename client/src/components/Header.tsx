@@ -1,6 +1,7 @@
+import styled from "@emotion/styled";
 import { Box, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import styled from "@emotion/styled";
+import AccountMenu from "./AccountMenu";
 
 export default function Header() {
   const StyledNavLink = styled(NavLink)({
@@ -13,16 +14,17 @@ export default function Header() {
         height: "auto",
       }}
     >
-      <StyledNavLink to="/"><Typography
-        variant="h5"
-        sx={{
-          padding: "0.5rem",
-          color: "primary.main",
-          mb: "3rem",
-        }}
-      >
-        The Friend Zone
-      </Typography>
+      <StyledNavLink to="/">
+        <Typography
+          variant="h5"
+          sx={{
+            padding: "0.5rem",
+            color: "primary.main",
+            mb: "0.8rem",
+          }}
+        >
+          The Friend Zone
+        </Typography>
       </StyledNavLink>
     </Box>
   );

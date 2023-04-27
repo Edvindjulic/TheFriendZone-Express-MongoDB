@@ -19,7 +19,7 @@ export default function Startpage() {
       }}
     >
       {user ? (
-        <Box sx={{ width: "100%", margin: "0rem 3rem" }}>
+        <Box sx={{ width: "100%", margin: "0rem 0rem" }}>
           <LoggedIn />
         </Box>
       ) : (

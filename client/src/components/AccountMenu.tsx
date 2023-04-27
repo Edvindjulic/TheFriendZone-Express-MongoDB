@@ -10,6 +10,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
 import * as React from "react";
+import { NavLink } from "react-router-dom";
 import { UserContext } from "../Context/UserContext";
 
 export default function AccountMenu() {
@@ -33,16 +34,15 @@ export default function AccountMenu() {
           textAlign: "center",
           justifyContent: "end",
           position: "relative",
+          padding: "1.5rem"
         }}
       >
-        <Typography sx={{ minWidth: 100 }}>Ska vi ens</Typography>
-        <Typography sx={{ minWidth: 100 }}>Ha dom här?</Typography>
         {user?.isAdmin && (
           <Box
             sx={{
               position: "absolute",
-              top: "-12px",
-              right: "11px",
+              top: "13%",
+              right: "33px",
               zIndex: 1,
             }}
           >
@@ -119,12 +119,14 @@ export default function AccountMenu() {
         </MenuItem>
         <Divider />
 
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Admin-panel
-        </MenuItem>
+        <NavLink to="./admin" style={{ textDecoration: "none" }}>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
+            Admin-panel
+          </MenuItem>
+        </NavLink>
         <MenuItem
           onClick={() => {
             handleClose();
