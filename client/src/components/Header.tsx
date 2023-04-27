@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { Box, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import AccountMenu from "./AccountMenu";
 
 export default function Header() {
   const StyledNavLink = styled(NavLink)({
@@ -12,6 +11,10 @@ export default function Header() {
     <Box
       sx={{
         height: "auto",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "1rem",
       }}
     >
       <StyledNavLink to="/">

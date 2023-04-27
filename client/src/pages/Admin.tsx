@@ -1,4 +1,4 @@
-import { Button, TableCell, TableHead, Typography } from "@mui/material";
+import { Box, Button, TableCell, TableHead, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -32,22 +32,42 @@ export default function Admin() {
   }, [getAllUsers, setAllUsers]);
 
   return (
-    <>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       {user?.isAdmin ? (
         <>
-          <AccountMenu />
-          <Typography variant="h3">Admin</Typography>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              position: "relative",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "primary.main",
+              marginBottom: "2rem",
+            }}
+          >
+            <Box sx={{ flexGrow: 3 }} />
+            <Typography variant="h4" sx={{ position: "absolute" }}>
+              Admin Page
+            </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+            <AccountMenu />
+          </Box>
 
           <TableContainer component={Paper} sx={{ maxWidth: 700 }}>
-            <Table sx={{ width: "100%" }} aria-label="simple table">
+            <Table sx={{ width: "100%", marginTop: "2rem" }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Användarnamn</TableCell>
-                  <TableCell align="right">Administratörsstatus</TableCell>
-                  <TableCell align="right">
-                    Ändra administratörsstatus
-                  </TableCell>
-                  <TableCell align="right">Ta bort användare</TableCell>
+                  <TableCell>Användare</TableCell>
+                  <TableCell>Admin</TableCell>
+                  <TableCell>Behörighet</TableCell>
+                  <TableCell>Radera</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -59,20 +79,17 @@ export default function Admin() {
                     <TableCell component="th" scope="row">
                       {user.username}
                     </TableCell>
-                    <TableCell align="right">
-                      {user.isAdmin.toString()}
-                    </TableCell>
-                    <TableCell align="right">
+                    <TableCell>{user.isAdmin ? "ja" : "nej"}</TableCell>
+                    <TableCell>
                       <Button
-                        onClick={() =>
-                          handleToggleAdmin(user._id, user.isAdmin)
-                        }
+                        variant="outlined"
+                        onClick={() => handleToggleAdmin(user._id, user.isAdmin)}
                       >
-                        Byt status
+                        Ändra
                       </Button>{" "}
                     </TableCell>
-                    <TableCell align="right">
-                      <Button onClick={() => handleRemoveUser(user._id)}>
+                    <TableCell>
+                      <Button variant="outlined" onClick={() => handleRemoveUser(user._id)}>
                         Ta bort{" "}
                       </Button>{" "}
                     </TableCell>
@@ -85,6 +102,6 @@ export default function Admin() {
       ) : (
         <Typography variant="h3">Du är inte administratör</Typography>
       )}
-    </>
+    </Box>
   );
 }
