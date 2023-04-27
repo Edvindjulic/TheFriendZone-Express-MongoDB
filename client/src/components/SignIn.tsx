@@ -1,7 +1,14 @@
 import styled from "@emotion/styled";
-import { Box, Button, Paper, TextField, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Paper,
+  TextField,
+  useMediaQuery,
+} from "@mui/material";
 import { useFormik } from "formik";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../Context/UserContext";
 
@@ -12,32 +19,45 @@ interface SigninValues {
 
 export default function SignInForm() {
   const { setUser } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
   const formik = useFormik<SigninValues>({
     initialValues: {
       username: "",
       password: "",
     },
     onSubmit: async (values: SigninValues) => {
+      setLoading(true);
       try {
-        const response = await fetch("/api/users/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        });
+        const response = await fetch(
+          "/api/users/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
+
+          await new Promise((resolve) =>
+            setTimeout(resolve, 2000)
+          );
+
           setUser(data);
-          console.log("Login successful, user:", data); //endast för att visa vilken användare som sparas i contexten
         } else {
           const message = await response.text();
           throw new Error(message);
         }
       } catch (error) {
-        console.error("Error logging in user:", error);
+        console.error(
+          "Error logging in user:",
+          error
+        );
       }
+      setLoading(false);
     },
   });
 
@@ -46,7 +66,9 @@ export default function SignInForm() {
     color: "black",
   });
 
-  const matches = useMediaQuery("(max-width:300px)");
+  const matches = useMediaQuery(
+    "(max-width:300px)"
+  );
   return (
     <Paper
       elevation={6}
@@ -83,8 +105,14 @@ export default function SignInForm() {
           value={formik.values.username}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.username && Boolean(formik.errors.username)}
-          helperText={formik.touched.username && formik.errors.username}
+          error={
+            formik.touched.username &&
+            Boolean(formik.errors.username)
+          }
+          helperText={
+            formik.touched.username &&
+            formik.errors.username
+          }
           sx={{
             backgroundColor: "white",
           }}
@@ -97,14 +125,38 @@ export default function SignInForm() {
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
+          error={
+            formik.touched.password &&
+            Boolean(formik.errors.password)
+          }
+          helperText={
+            formik.touched.password &&
+            formik.errors.password
+          }
           sx={{
             backgroundColor: "white",
           }}
         />
-        <Button color="secondary" type="submit" variant="contained">
-          Logga in
+        <Button
+          color="secondary"
+          type="submit"
+          variant="contained"
+          disabled={loading}
+        >
+          {loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <CircularProgress size={24} />
+            </Box>
+          ) : (
+            "Logga in"
+          )}
         </Button>
         <StyledNavLink to="/signup">
           Har du inget konto? Skapa ett här!
