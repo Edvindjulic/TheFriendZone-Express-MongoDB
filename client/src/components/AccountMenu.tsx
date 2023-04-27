@@ -42,7 +42,7 @@ export default function AccountMenu() {
             sx={{
               position: "absolute",
               top: "13%",
-              right: "33px",
+              right: "35px",
               zIndex: 1,
             }}
           >
