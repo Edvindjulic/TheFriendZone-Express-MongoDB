@@ -37,7 +37,7 @@ export default function SignUpForm() {
           },
           body: JSON.stringify(values),
         });
-
+    
         if (response.ok) {
           const data = await response.json();
           console.log("Registration successful, user:", data);
@@ -45,10 +45,11 @@ export default function SignUpForm() {
           const message = await response.text();
           throw new Error(message);
         } 
-      }catch (error) {
-          console.error("Error registering user:", error);
-        }
-      },
+      } catch (error) {
+        console.error("Error registering user:", error);
+        formik.setFieldError("username", error.message.replace(/"/g, ""));
+      }
+    }
   });
 
   return (
