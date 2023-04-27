@@ -132,6 +132,8 @@ export default function UserProvider({ children }: Props) {
 
   return (
     <UserContext.Provider
+
+
       value={{
         user,
         setUser,
@@ -142,6 +144,7 @@ export default function UserProvider({ children }: Props) {
         allUsers,
         setAllUsers,
       }}
+
     >
       {children}
     </UserContext.Provider>
