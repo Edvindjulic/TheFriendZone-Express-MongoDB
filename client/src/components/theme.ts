@@ -21,6 +21,11 @@ export const theme = createTheme({
       "Source Sans Pro",
       "Libre Franklin",
     ].join(","),
+    h6: {
+      fontWeight: 200,
+      fontFamily: "Libre Franklin",
+      fontSize: "20px",
+    },
     h5: {
       fontWeight: 600,
       fontFamily: "Libre Franklin",

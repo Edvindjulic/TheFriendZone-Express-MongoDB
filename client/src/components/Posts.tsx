@@ -61,6 +61,7 @@ export default function Posts() {
             key={index}
             elevation={2}
             sx={{
+              position: "relative",
               p: 7,
               display: "flex",
               flexDirection: "column",
@@ -72,44 +73,49 @@ export default function Posts() {
               backgroundColor: "white",
             }}
           >
+            <Typography
+              variant="h6"
+              sx={{
+                position: "absolute",
+                top: 8,
+                left: 8,
+              }}
+            >
+              <b>{post.authorName}</b>
+            </Typography>
             <StyledNavLink
               to={"/post/" + post._id}
               style={{
                 color: "black",
                 cursor: "pointer",
                 marginBottom: "1rem",
+                alignSelf: "center",
               }}
             >
-              <Typography
-                variant="h5"
-                sx={{ marginBottom: "1rem" }}
-              >
+              <Typography variant="h5" sx={{ marginBottom: "1rem" }}>
                 {post.title}
               </Typography>
             </StyledNavLink>
 
-            <Typography variant="body1">
-              {post.content}
-            </Typography>
-            <Typography variant="body2">
-              <b> {post.authorName}</b>
-            </Typography>
+            <Typography variant="body1" sx={{margin: "0.5rem"}}>{post.content}</Typography>
             {user &&
-              (user._id === post.author ||
-                user.isAdmin) && (
+              (user._id === post.author || user.isAdmin) && (
                 <Button
-                  onClick={() =>
-                    deletePost(post._id)
-                  }
+                  variant="outlined"
+                  color="error"
+                  onClick={() => deletePost(post._id)}
+                  sx={{
+                    position: "absolute",
+                    bottom: 8,
+                    right: 8,
+                    
+                  }}
                 >
                   Remove Post
                 </Button>
               )}
           </Paper>
         ))}
-      <p>
-        Number of posts: {updatedPosts.length}
-      </p>
     </Box>
   );
 }
