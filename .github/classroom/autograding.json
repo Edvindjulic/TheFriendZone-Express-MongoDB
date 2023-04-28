@@ -2,7 +2,7 @@
   "tests": [
     {
       "name": "Krav G",
-      "setup": "exit 1 && cd server && npm install",
+      "setup": "cd server && npm install",
       "run": "cd server && npx plugga test --vitest --ts --run .g.",
       "input": "",
       "output": "",
@@ -12,7 +12,7 @@
     },
     {
       "name": "Krav VG",
-      "setup": "exit 1 && cd server && npm install",
+      "setup": "cd server && npm install",
       "run": "cd server && npx plugga test --vitest --ts --run .vg.",
       "input": "",
       "output": "",
